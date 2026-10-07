@@ -1,0 +1,19 @@
+# ── Scratch / planning ────────────────────────────────────────────────────────
+scratch/
+
+# ── Eval runs ─────────────────────────────────────────────────────────────────
+# `claude plugin eval` writes each run's results and report here.
+evals/results/
+
+# ── Environment & Secrets ─────────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+
+# ── Editors & local agent settings ────────────────────────────────────────────
+# `.claude/` is a person's own settings; `.claude-plugin/` is the published manifest.
+.claude/
+.vscode/
+.zed/
+.idea/
+.DS_Store

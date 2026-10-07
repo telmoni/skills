@@ -1,0 +1,17 @@
+{
+  "name": "telmoni",
+  "description": "Telmoni's agent skills, installed as one plugin.",
+  "owner": {
+    "name": "Telmoni",
+    "email": "hello@telmoni.com",
+    "url": "https://telmoni.com"
+  },
+  "plugins": [
+    {
+      "name": "telmoni",
+      "source": "./",
+      "description": "Skills for working with Telmoni: the telmoni CLI, API keys and the read-only /v1 API, signed webhooks, and self-hosting with Docker Compose or Kubernetes.",
+      "category": "development"
+    }
+  ]
+}
