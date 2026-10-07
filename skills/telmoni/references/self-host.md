@@ -4,7 +4,7 @@ description: Self-host Telmoni — choose Docker Compose or the Helm chart, writ
 
 # Self-hosting Telmoni
 
-Start at https://docs.telmoni.com/self-host/overview/, then follow the page for the method: `self-host/docker-compose` for one host, to evaluate or serve a small company; `self-host/kubernetes` for the Helm chart. `self-host/configuration` lists every variable, and `self-host/production` covers OIDC, database roles, partition rotation, backups and what the server refuses at boot.
+Start at https://docs.telmoni.com/self-host/overview/, then follow the page for the method: `self-host/docker-compose` for one host, to evaluate or serve a small company; `self-host/kubernetes` for the Helm chart. `self-host/configuration` lists every variable the server and console read (the Compose stack's own, such as `POSTGRES_PASSWORD` and the image tags, are on `self-host/docker-compose`), and `self-host/production` covers OIDC, database roles, partition rotation, backups and what the server refuses at boot.
 
 ## Before changing anything
 
@@ -34,6 +34,6 @@ The server checks its whole environment at boot and exits with the reason in its
 
 - `ADMIN_EMAIL` and `ADMIN_PASSWORD` only bootstrap the first account. For production, connect OIDC, remove both, then set `DISABLE_LOGIN_FORM=true`: the server refuses to boot with that switch and either variable set.
 - `CONNECTOR_KEK` decrypts every connector's secrets. A `local:` key has to be backed up with the database dumps, and a Cloud KMS key must never be disabled or destroyed.
-- A change the audit log records fails when its month has no partition, and `telmoni migrate` creates only four months ahead. On Compose, schedule `docker compose -f deploy/compose/docker-compose.yml run --rm migrate rotate` (weekly is enough) so the runway keeps moving; the chart runs it daily.
+- A change the audit log records fails when its month has no partition; the first `telmoni migrate` creates this month and the next three, and nothing adds more until `rotate` runs. On Compose, schedule `docker compose -f deploy/compose/docker-compose.yml run --rm migrate rotate` (weekly is enough) so the runway keeps moving; the chart runs it daily.
 - `telmoni terminate <org id>` closes an organization at once, and its owner cannot undo it. Confirm the organization with the user before running it; `self-host/production` covers `restore` and the sweeps.
 - The console agent is off until `AGENT_MODEL_PROVIDER` is set. `self-host/agent` covers models and embeddings (768 dimensions), and `DOCS_CORPUS_URL=off` for a deployment that must fetch nothing from docs.telmoni.com.
