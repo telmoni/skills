@@ -4,7 +4,7 @@ description: Install and drive the `telmoni` CLI — sign in on a laptop, over S
 
 # The telmoni CLI
 
-Every command, flag, variable and output field is on https://docs.telmoni.com/api/cli/. The CLI signs in and out, reports who it is signed in as, and chooses an organization; beyond its own session, it changes nothing on the server.
+Every command, flag, variable and output field is on https://docs.telmoni.com/api/cli/. The CLI signs in and out, reports who it is signed in as, and chooses an organization; beyond its own session, it changes nothing on the server, except that `login` and `status` have the server provision a first organization for a person who belongs to none, as a console sign-in does.
 
 ## Install
 
@@ -28,7 +28,7 @@ Run `telmoni --version` first. If it's missing, the installer on the CLI page se
 
 - `telmoni status --json` is the machine interface. Branch on `authType` before reading anything else: `device` carries `person` and `activeOrganization` (`organizationId`, `slug`, `label`, `role`, or `null`), `api_key` carries `organization`.
 - Judge a run by its exit code: 0 for success, 1 for any failure (the reason is on stderr), 2 for a usage error. Signed out, plain `status` still prints `Endpoint: …` to stdout before failing, while `--json` prints nothing.
-- `org list` has no JSON form. Each line is `<* or space><id>  <slug>  <label>  <role>`, two spaces apart; a label can contain spaces, so read the role from the right. It shows the list saved by the last `login`, `status` or `org switch`.
+- `org list` has no JSON form. Each line is `<* or space> <id>  <slug>  <label>  <role>`, the fields two spaces apart; a label can contain spaces, so read the role from the right. It shows the list saved by the last `login`, `status` or `org switch`.
 - Name organizations by ID (`org_…`). A slug moves when its organization's URL changes, and the CLI matches slugs exactly against its saved list, without asking the server.
 - `TELMONI_ORG=<id> telmoni status` acts in another organization for one command without switching; device sign-ins only.
 - Run `telmoni` commands one at a time: each may rotate the saved refresh token, and nothing locks the file between processes.
