@@ -23,7 +23,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: astral-sh/setup-uv@v10
+      # setup-uv publishes exact tags only, no floating major.
+      - uses: astral-sh/setup-uv@v10.2.0
 
       # Claude Code's validator needs Node 22 or later, and no credentials.
       - uses: actions/setup-node@v7
