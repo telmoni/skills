@@ -4,7 +4,7 @@ description: Call Telmoni's read-only `/v1` API with a project API key, handle i
 
 # The /v1 API and API keys
 
-Fetch the page before writing a client: https://docs.telmoni.com/api/reference/ (routes and fields), https://docs.telmoni.com/api/api-keys/ (minting, rotation, revocation), https://docs.telmoni.com/errors/ (every error type).
+Fetch the page before writing a client: https://telmoni.com/docs/api/reference (routes and fields), https://telmoni.com/docs/api/api-keys (minting, rotation, revocation), https://telmoni.com/docs/errors (every error type).
 
 ## What exists
 

@@ -4,7 +4,7 @@ description: Install and drive the `telmoni` CLI — sign in on a laptop, over S
 
 # The telmoni CLI
 
-Every command, flag, variable and output field is on https://docs.telmoni.com/api/cli/. The CLI signs in and out, reports who it is signed in as, and chooses an organization; beyond its own session, it changes nothing on the server, except that `login` and `status` have the server provision a first organization for a person who belongs to none, as a console sign-in does.
+Every command, flag, variable and output field is on https://telmoni.com/docs/api/cli. The CLI signs in and out, reports who it is signed in as, and chooses an organization; beyond its own session, it changes nothing on the server, except that `login` and `status` have the server provision a first organization for a person who belongs to none, as a console sign-in does.
 
 ## Install
 

@@ -3,7 +3,7 @@
 [![CI](https://github.com/telmoni/skills/actions/workflows/ci.yml/badge.svg)](https://github.com/telmoni/skills/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
-[Agent Skills](https://agentskills.io) that teach coding agents (Claude Code, Codex and ChatGPT, OpenCode, Antigravity, Cursor and any other that reads `SKILL.md`) to work with [Telmoni](https://github.com/telmoni/telmoni): the `telmoni` CLI, API keys and the read-only `/v1` API, signed webhooks, and self-hosting. A skill sends the agent to [docs.telmoni.com](https://docs.telmoni.com) for the details and adds what the pages alone don't give it: which path fits which situation, the mistakes agents make, and the guardrails around keys and someone's infrastructure.
+[Agent Skills](https://agentskills.io) that teach coding agents (Claude Code, Codex and ChatGPT, OpenCode, Antigravity, Cursor and any other that reads `SKILL.md`) to work with [Telmoni](https://github.com/telmoni/telmoni): the `telmoni` CLI, API keys and the read-only `/v1` API, signed webhooks, and self-hosting. A skill sends the agent to [telmoni.com/docs](https://telmoni.com/docs) for the details and adds what the pages alone don't give it: which path fits which situation, the mistakes agents make, and the guardrails around keys and someone's infrastructure.
 
 Telmoni has not launched yet, and the skills cover what a user can reach today.
 
@@ -81,7 +81,7 @@ Makefile         make check, the gate CI runs; make eval, the eval suite
 
 ## Contributing
 
-How to contribute, the AI policy, the Code of Conduct and the security policy are on the docs site: [docs.telmoni.com/contributing](https://docs.telmoni.com/contributing/introduction/). [`AGENTS.md`](AGENTS.md) holds the rules every change to a skill is held to, and how to test one. A skill that gave an agent wrong guidance is an [issue here](https://github.com/telmoni/skills/issues); a problem with Telmoni itself goes to the repository concerned, as [SUPPORT.md](https://github.com/telmoni/.github/blob/main/SUPPORT.md) lists.
+How to contribute, the AI policy, the Code of Conduct and the security policy are in the docs: [telmoni.com/docs/contributing](https://telmoni.com/docs/contributing/introduction). [`AGENTS.md`](AGENTS.md) holds the rules every change to a skill is held to, and how to test one. A skill that gave an agent wrong guidance is an [issue here](https://github.com/telmoni/skills/issues); a problem with Telmoni itself goes to the repository concerned, as [SUPPORT.md](https://github.com/telmoni/.github/blob/main/SUPPORT.md) lists.
 
 ## License
 

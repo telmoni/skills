@@ -7,7 +7,7 @@
     "email": "hello@telmoni.com",
     "url": "https://telmoni.com"
   },
-  "homepage": "https://docs.telmoni.com",
+  "homepage": "https://telmoni.com/docs",
   "repository": "https://github.com/telmoni/skills",
   "license": "Apache-2.0",
   "keywords": ["telmoni", "cli", "api-keys", "webhooks", "self-hosting"],
@@ -16,7 +16,7 @@
       "interface": {
         "displayName": "Telmoni",
         "shortDescription": "Telmoni CLI, API and webhooks",
-        "longDescription": "Works with Telmoni, the platform for organizations and projects, members and roles, API keys, notifications and a hash-chained audit log. Drives the telmoni CLI, calls the read-only /v1 API with an API key, builds and tests receivers for Telmoni's signed webhooks, self-hosts Telmoni with Docker Compose or Kubernetes, and finds answers at docs.telmoni.com. The skill sends no data anywhere: it only reads Telmoni's public documentation.",
+        "longDescription": "Works with Telmoni, the platform for organizations and projects, members and roles, API keys, notifications and a hash-chained audit log. Drives the telmoni CLI, calls the read-only /v1 API with an API key, builds and tests receivers for Telmoni's signed webhooks, self-hosts Telmoni with Docker Compose or Kubernetes, and finds answers at telmoni.com/docs. The skill sends no data anywhere: it only reads Telmoni's public documentation.",
         "developerName": "Telmoni",
         "category": "Developer Tools",
         "capabilities": [
@@ -27,8 +27,8 @@
         ],
         "websiteURL": "https://telmoni.com",
         "supportURL": "https://github.com/telmoni/.github/blob/main/SUPPORT.md",
-        "privacyPolicyURL": "https://docs.telmoni.com/legal/privacy-policy/",
-        "termsOfServiceURL": "https://docs.telmoni.com/legal/terms-of-service/",
+        "privacyPolicyURL": "https://telmoni.com/docs/legal/privacy-policy",
+        "termsOfServiceURL": "https://telmoni.com/docs/legal/terms-of-service",
         "defaultPrompt": [
           "Add a route to my app that receives and verifies Telmoni webhooks.",
           "Sign my CI pipeline in to Telmoni with an API key and check it works.",

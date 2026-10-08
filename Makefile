@@ -6,7 +6,7 @@ AGENT_PLUGINS_SCHEMA := https://agent-plugins.org/schemas/1.0.0/plugin.schema.js
 
 # The tools an eval run may use beyond the read-only set. Bash runs inside Claude Code's sandbox
 # (on Linux it needs bubblewrap and socat), whose network reaches only the domains granted here.
-EVAL_TOOLS := Write Edit Bash "WebFetch(domain:docs.telmoni.com)"
+EVAL_TOOLS := Write Edit Bash "WebFetch(domain:telmoni.com)"
 CASE ?= *
 RUNS ?= 3
 

@@ -4,7 +4,7 @@ description: Build, test or debug an endpoint that receives Telmoni's signed web
 
 # Receiving Telmoni webhooks
 
-Fetch https://docs.telmoni.com/integrations/webhooks/ before writing code, and port its verifier (Node and Python are on the page) into the user's stack: the page is kept in step with the platform's signer. What follows is where receivers go wrong.
+Fetch https://telmoni.com/docs/integrations/webhooks before writing code, and port its verifier (Node and Python are on the page) into the user's stack: the page is kept in step with the platform's signer. What follows is where receivers go wrong.
 
 ## Verify over the exact bytes
 

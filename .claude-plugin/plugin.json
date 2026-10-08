@@ -7,7 +7,7 @@
     "email": "hello@telmoni.com",
     "url": "https://telmoni.com"
   },
-  "homepage": "https://docs.telmoni.com",
+  "homepage": "https://telmoni.com/docs",
   "repository": "https://github.com/telmoni/skills",
   "license": "Apache-2.0",
   "keywords": ["telmoni", "cli", "api-keys", "webhooks", "self-hosting"]

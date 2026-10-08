@@ -1,10 +1,10 @@
 ---
 name: telmoni
 description: >-
-  Works with Telmoni, the platform for organizations and projects, members and roles, API keys, notifications and a hash-chained audit log: drives the `telmoni` CLI, calls the read-only `/v1` API with a `telmoni_` API key, builds and tests receivers for its signed webhooks, self-hosts it with Docker Compose or Kubernetes, and finds answers in its documentation. Use for any task that involves Telmoni or docs.telmoni.com, including when only the code or configuration names it (`TELMONI_API_KEY`, `TELMONI_ENDPOINT`, `Telmoni-Signature`).
+  Works with Telmoni, the platform for organizations and projects, members and roles, API keys, notifications and a hash-chained audit log: drives the `telmoni` CLI, calls the read-only `/v1` API with a `telmoni_` API key, builds and tests receivers for its signed webhooks, self-hosts it with Docker Compose or Kubernetes, and finds answers in its documentation. Use for any task that involves Telmoni or telmoni.com/docs, including when only the code or configuration names it (`TELMONI_API_KEY`, `TELMONI_ENDPOINT`, `Telmoni-Signature`).
 license: Apache-2.0
 allowed-tools:
-  - WebFetch(domain:docs.telmoni.com)
+  - WebFetch(domain:telmoni.com)
   - Bash(telmoni --version)
   - Bash(telmoni status *)
   - Bash(telmoni whoami *)
@@ -37,11 +37,11 @@ Read the one that matches the task before acting:
 
 ## Documentation
 
-Pages are HTML at `https://docs.telmoni.com/<path>/`; fetch them with your web fetch tool. The site has no `llms.txt` and no Markdown copy of a page.
+Pages are at `https://telmoni.com/docs/<path>`, served by the console itself; fetch them with your web fetch tool. `https://telmoni.com/llms.txt` lists every page with its address and description, and `https://telmoni.com/llms-full.txt` is every page's text in one Markdown file. A self-hosted deployment serves the same three at its own origin, for the version it runs.
 
 | Topic | Paths |
 |---|---|
-| Introduction, signing in | the site root, `getting-started/sign-in` |
+| Introduction, signing in | the book's root (`/docs`), `getting-started/sign-in` |
 | Organizations, projects, members, roles | `workspace/organizations-and-projects`, `workspace/members`, `workspace/roles` |
 | Audit log, billing on the hosted service | `workspace/audit-log`, `workspace/billing` |
 | Notifications, Slack, Discord, webhooks | `integrations/notifications`, `integrations/slack-and-discord`, `integrations/webhooks` |
@@ -53,7 +53,7 @@ Pages are HTML at `https://docs.telmoni.com/<path>/`; fetch them with your web f
 To find which page mentions a term (an environment variable, an error type, a header), search the text of the whole site; each match prints with the page it came from:
 
 ```bash
-curl -s https://docs.telmoni.com/llms-full.txt | awk -v q='<term>' '/^Source: /{src=$2} index(tolower($0), tolower(q)) {print src": "$0}'
+curl -s https://telmoni.com/llms-full.txt | awk -v q='<term>' '/^Source: /{src=$2} index(tolower($0), tolower(q)) {print src": "$0}'
 ```
 
 A suspected vulnerability is reported privately, as `legal/security` describes, never in a public issue.
