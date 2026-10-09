@@ -4,7 +4,7 @@ description: Install and drive the `telmoni` CLI — sign in on a laptop, over S
 
 # The telmoni CLI
 
-Every command, flag, variable and output field is on https://telmoni.com/docs/api/cli. The CLI signs in and out, reports who it is signed in as, and chooses an organization; beyond its own session, it changes nothing on the server, except that `login` and `status` have the server provision a first organization for a person who belongs to none, as a console sign-in does.
+Every command, flag, variable and output field is on https://telmoni.com/docs/api/cli. The CLI signs in and out, reports who it is signed in as, and chooses an organization; beyond its own session, it changes nothing on the server, except that `login`, `status` and `org switch` have the server provision a first organization for a person who belongs to none, as a console sign-in does.
 
 ## Install
 
@@ -35,11 +35,11 @@ Run `telmoni --version` first. If it's missing, the installer on the CLI page se
 
 ## Self-hosted endpoints
 
-The endpoint is chosen at `login`, from `--endpoint`, then `TELMONI_ENDPOINT`, then `telmoni config set endpoint`, then `https://telmoni.com`. A saved session keeps the endpoint it signed in to, so moving to another deployment means `telmoni logout`, then `telmoni login --endpoint <origin>`. The CLI sends credentials only over HTTPS, except to localhost or a loopback address.
+The endpoint is chosen at `login`, from `--endpoint`, then `TELMONI_ENDPOINT`, then `telmoni config set endpoint`, then `https://telmoni.com`. A saved session keeps the endpoint it signed in to, so moving to another deployment means `telmoni logout`, then `telmoni login --endpoint <origin>`. The CLI sends credentials only over HTTPS, except to localhost or a loopback address; even then, a proxy set in `HTTP_PROXY` or `ALL_PROXY` receives them in the clear unless `NO_PROXY` lists the host.
 
 ## When it fails
 
-- `-v` after the subcommand (`telmoni status -v`) logs to stderr where the endpoint came from, which files the CLI read and wrote, and each request's method, address and status, never a header, token or key.
+- `-v` after the subcommand (`telmoni status -v`) logs to stderr which files the CLI read and wrote and each request's method, address and status, never a header, token or key; at `login` it also says where the endpoint came from.
 - `session ended; run telmoni login` means the session was ended (signed out elsewhere, ended from **Active sessions**, or 30 days unused) and the CLI already deleted its credentials: the user signs in again.
 - The CLI needs network access to the endpoint and must write refreshed tokens to its configuration directory; in a sandbox that blocks the write, a refresh it cannot save ends the session.
 - Behind a proxy that intercepts TLS, certificate errors follow: the CLI trusts only its bundled root certificates, not the system store or `SSL_CERT_FILE`.
