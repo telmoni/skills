@@ -1,13 +1,13 @@
 # Telmoni Skills — Agent Guidelines
 
-The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skills)): instructions that coding agents (Claude Code, Codex, Cursor and any other that reads `SKILL.md`) load to work with Telmoni on a person's behalf. Every skill restates what the platform ([`telmoni/telmoni`](https://github.com/telmoni/telmoni)) and the CLI and SDKs ([`telmoni/telmoni-cli`](https://github.com/telmoni/telmoni-cli)) do, and routes the agent to [docs.telmoni.com](https://docs.telmoni.com) ([`telmoni/docs`](https://github.com/telmoni/docs)) for the rest; those repositories are the authority on everything written here. The repository is public, and every file in it is published as written.
+The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skills)): instructions that coding agents (Claude Code, Codex, Cursor and any other that reads `SKILL.md`) load to work with Telmoni on a person's behalf. Every skill restates what the platform ([`telmoni/telmoni`](https://github.com/telmoni/telmoni)) and the CLI and SDKs ([`telmoni/telmoni-cli`](https://github.com/telmoni/telmoni-cli)) do, and routes the agent to the docs at [telmoni.com/docs](https://telmoni.com/docs) (the platform's book, `web/content/docs`) for the rest; those repositories are the authority on everything written here. The repository is public, and every file in it is published as written.
 
 ## Ground Rules
 - **Pre-launch:** nothing has shipped. Rename, restructure and rewrite skills to their ideal state; no deprecated names, redirects or migration notes.
 - **Quality gate:** never leave the tree broken.
 - **Ask first:** a new skill, a new top-level directory, any change to a skill's `allowed-tools`, any dependency (a GitHub Action, a tool CI or the `Makefile` installs), and any external-state change (publishing to a marketplace, a release, a call to a live Telmoni with a real key).
 - **Cover only what a user can reach**, as the docs do: signing in, the CLI and SDKs, API keys and the read-only `/v1` API, errors, notifications and connectors, organizations, projects, members, roles and the audit log, and self-hosting. Never anything not built yet: a capability gets a reference once a user can reach it, never ahead of it.
-- **Public sources only:** nothing from the private hosted-service repository, its roadmap or its plans goes into a skill, beyond what docs.telmoni.com already states.
+- **Public sources only:** nothing from the private hosted-service repository, its roadmap or its plans goes into a skill, beyond what telmoni.com/docs already states.
 
 ## Where Things Live
 | Path | What |
@@ -20,9 +20,8 @@ The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skil
 | `Makefile` | `check`, the gate, and `eval`, the eval suite. |
 | `.github/workflows/ci.yml` | CI: `make check` and actionlint. |
 | `scratch/` | The maintainer's notes, gitignored. Never write to it. |
-| [`telmoni/telmoni`](https://github.com/telmoni/telmoni) | Sibling repo, checked out as `../telmoni`: the platform, and the authority on the API, webhooks, errors and self-hosting. |
+| [`telmoni/telmoni`](https://github.com/telmoni/telmoni) | Sibling repo, checked out as `../telmoni`: the platform, the authority on the API, webhooks, errors and self-hosting, and its book (`web/content/docs`), which telmoni.com/docs serves with the hosted service's own pages (billing, legal) beside it: the pages every skill links to. |
 | [`telmoni/telmoni-cli`](https://github.com/telmoni/telmoni-cli) | Sibling repo, checked out as `../telmoni-cli`: the CLI and SDKs, and the authority on their commands, flags and variables. |
-| [`telmoni/docs`](https://github.com/telmoni/docs) | Sibling repo, checked out as `../docs`: the pages every skill links to. |
 
 ## Commands
 - **After every change** (no permission needed; report failures verbatim): `make check`, which validates each skill against the Agent Skills spec (`skills-ref`), `plugin.json` against the Agent Plugins schema, and the Claude Code plugin and marketplace (`claude plugin validate .`). It needs `uv` and Claude Code. Its one expected warning is the missing `version` (Versioning).
@@ -32,20 +31,20 @@ The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skil
 ## Writing Rules
 Read every file as its runtime reader does: an agent in the middle of someone's task, wanting to act. A line it cannot act on, or would have known anyway, is noise that dilutes the rest.
 - **Beat the docs, or add nothing.** An agent can fetch any page itself. A skill adds the decision (which path for which situation), the trap (what agents get wrong), the guardrail (secrets, someone's infrastructure) and where to look; restating a page is maintenance that goes stale.
-- **Link, don't copy.** Link the served page (`https://docs.telmoni.com/integrations/webhooks/`) so the agent reads the current version. No code samples: the docs carry them, in step with the platform. A command line, a header or a field name is fine.
+- **Link, don't copy.** Link the served page (`https://telmoni.com/docs/integrations/webhooks`) so the agent reads the current version. No code samples: the docs carry them, in step with the platform. A command line, a header or a field name is fine.
 - **Routing lives in exactly two places:** one line per reference in `SKILL.md`'s `## References` list, and that reference's frontmatter `description`. No "when to use" prose anywhere else; a reference body is read only after the agent chose it.
 - **Leave a skill's `description` alone** unless the skill's scope changes. It only decides whether the skill loads at all; routing inside the skill is the body's job.
 - **Every line earns its place.** A reference is at most 100 lines, frontmatter included, and `SKILL.md` stays far below the 500-line ceiling. Cut filler, hedging, restatement and anything an agent infers alone.
 - **Give the reason, not the volume.** One clause of why ("a parsed body no longer matches the signature") steers an agent better than ALWAYS or NEVER in capitals.
 - **Verify against source before writing:** every command, flag, variable, header, route, status code, limit and retry schedule, in `telmoni/telmoni` or `telmoni/telmoni-cli`, and every page you link. The live site can lag the code.
 - **Claim only what a diff could disprove:** describe mechanisms, never outcomes ("tamper-resistant", "secure", "guaranteed").
-- **`allowed-tools` lists only no-brainers:** fetching docs.telmoni.com, and CLI commands that read (`telmoni --version`, `status`, `whoami`, `org list`, `config get`, `config list`). A tool not listed still runs after one prompt; an auto-allow a person would hesitate over keeps them from installing the skill.
+- **`allowed-tools` lists only no-brainers:** fetching telmoni.com, and CLI commands that read (`telmoni --version`, `status`, `whoami`, `org list`, `config get`, `config list`). A tool not listed still runs after one prompt; an auto-allow a person would hesitate over keeps them from installing the skill.
 - **Secrets never pass through a conversation:** a skill has the agent check a key by its presence, never read, print or ask for one, and the same for `whsec_` secrets and `.env` files.
 - **Every skill carries `license: Apache-2.0`** in its frontmatter: an install copies the skill's directory without this repository's `LICENSE`.
 
 ## Contracts
-These files restate code and pages; when those change, the skill follows:
-- `skills/telmoni/SKILL.md`, the documentation table: the sidebar in `astro.config.mjs` in `telmoni/docs`.
+These files restate code and pages; when those change, the skill follows. Every `.mdx` named here is under `web/content/docs` in `telmoni/telmoni`.
+- `skills/telmoni/SKILL.md`, the documentation table: the book's sidebar as telmoni.com/docs serves it, the `meta.json` files under `web/content/docs` with the hosted service's own pages (billing, legal) beside them.
 - `references/cli.md`: commands, flags, variables and output in `src/` of `telmoni/telmoni-cli`, and `api/cli.mdx`.
 - `references/api.md`: `crates/auth/src/handler/v1.rs`, `crates/auth/src/handler/tokens.rs`, `web/app/v1/[...path]/route.ts` and the error types in `crates/shared/src/error.rs` in `telmoni/telmoni`, `sdk/` in `telmoni/telmoni-cli`, and `api/reference.mdx`, `api/api-keys.mdx`, `api/sdks.mdx` and `errors.mdx`.
 - `references/webhooks.md`: `crates/notifications/src/connector/webhook.rs`, `crates/notifications/src/delivery.rs` and `web/lib/webhook-signature.ts` in `telmoni/telmoni`, and `integrations/webhooks.mdx`.
@@ -63,7 +62,7 @@ A skill is tested on the agents it ships to: a sentence that reads clearly in a 
 - A grader that reads a file names it by path, so the prompt names the files it expects the agent to write.
 
 ## Agent Hygiene
-- **This repo only:** change nothing in another repository (`telmoni/telmoni`, `telmoni/telmoni-cli`, `telmoni/docs`, any other) unless the user says so for this task; that binds subagents too. Reading is fine.
+- **This repo only:** change nothing in another repository (`telmoni/telmoni`, `telmoni/telmoni-cli`, any other) unless the user says so for this task; that binds subagents too. Reading is fine.
 - Edit `AGENTS.md` (`.github/copilot-instructions.md` points here) only when the user asks outright; otherwise propose a diff. There is no `CLAUDE.md`: Claude Code reads this file, and a `CLAUDE.md` at a plugin's root fails `claude plugin validate --strict`.
 - No AI signatures anywhere, skills included.
 - No scripted bulk edits: edit each file deliberately and review the diff. One-off scripts, eval workspaces and logs go in `/tmp/telmoni/`.
