@@ -21,7 +21,7 @@ Telmoni runs organizations and their projects: members and roles, API keys, noti
 
 1. **Docs before memory.** Telmoni changes faster than any model's training data. Fetch the relevant page before writing code or giving instructions, and take commands, fields and limits from it.
 2. **Only what exists.** The API reads two things and writes nothing, the SDKs hold configuration and send no requests, and nothing ingests agent runs or traces yet. When a task needs something the docs don't describe, say so and offer the nearest thing that exists; an invented route, flag, SDK method or event kind fails only once the user runs it.
-3. **Most actions happen in the console.** Creating organizations and projects, inviting members, changing roles, minting, rotating and revoking API keys, connecting Slack, Discord or a webhook, and reading the audit log have no API or CLI command. Walk the user through the page that documents the action, at the console path it gives (such as `/{organization}/{project}/api-keys`).
+3. **Most actions happen in the console.** Creating organizations and projects, inviting members, changing roles, minting, rotating and revoking API keys, connecting Slack, Discord or a webhook, and reading or exporting the audit log have no API or CLI command. Walk the user through the page that documents the action, at the console path it gives (such as `/{organization}/{project}/api-keys`).
 4. **Secrets stay out of the conversation.** Never ask for an API key, a webhook signing secret or a `.env` file's contents, and never print, `cat` or log one: whatever reaches the transcript has leaked. Check presence instead (`[ -n "$TELMONI_API_KEY" ] && echo set`), and pass keys to commands through the environment, not as arguments.
 5. **Know the endpoint.** The CLI and SDKs use `https://telmoni.com` unless `TELMONI_ENDPOINT` names a self-hosted deployment's origin. When the code and environment don't settle which one the user means, ask: credentials from one deployment never work on another.
 6. **Without a shell** (a chat with no terminal, such as ChatGPT on the web), give the user each command to run and read what they paste back, and open documentation pages with whatever browsing or fetch tool you have.
@@ -47,7 +47,7 @@ Pages are at `https://telmoni.com/docs/<path>`, served by the console itself; fe
 | Notifications, Slack, Discord, webhooks | `integrations/notifications`, `integrations/slack-and-discord`, `integrations/webhooks` |
 | CLI, SDKs, API keys, API, errors | `api/cli`, `api/sdks`, `api/api-keys`, `api/reference`, `errors` |
 | Self-hosting | `self-host/overview`, `self-host/docker-compose`, `self-host/kubernetes`, `self-host/agent`, `self-host/configuration`, `self-host/production` |
-| Account settings, sessions, deletion | `account/settings`, `account/privacy` |
+| Account settings, accessibility, sessions, deletion | `account/settings`, `account/accessibility`, `account/privacy` |
 | Legal, security, subprocessors | `legal/privacy-policy`, `legal/terms-of-service`, `legal/subprocessors`, `legal/security` |
 
 To find which page mentions a term (an environment variable, an error type, a header), search the text of the whole site; each match prints with the page it came from:
