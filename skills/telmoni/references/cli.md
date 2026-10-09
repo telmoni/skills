@@ -35,7 +35,7 @@ Run `telmoni --version` first. If it's missing, the installer on the CLI page se
 
 ## Self-hosted endpoints
 
-The endpoint is chosen at `login`, from `--endpoint`, then `TELMONI_ENDPOINT`, then `telmoni config set endpoint`, then `https://telmoni.com`. A saved session keeps the endpoint it signed in to, so moving to another deployment means `telmoni logout`, then `telmoni login --endpoint <origin>`. The CLI sends credentials only over HTTPS, except to localhost or a loopback address; even then, a proxy set in `HTTP_PROXY` or `ALL_PROXY` receives them in the clear unless `NO_PROXY` lists the host.
+The endpoint is chosen at `login`, from `--endpoint`, then `TELMONI_ENDPOINT`, then `telmoni config set endpoint`, then `https://telmoni.com`. A saved session keeps the endpoint it signed in to, so moving to another deployment means `telmoni logout`, then `telmoni login --endpoint <origin>`. The CLI sends credentials only over HTTPS, except to localhost or a loopback address, which it reaches past any proxy.
 
 ## When it fails
 
