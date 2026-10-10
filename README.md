@@ -42,7 +42,17 @@ agy plugin install ./telmoni-skills
 
 `git pull` in the clone, then the same install again, brings a newer version.
 
-### OpenCode, Cursor, Copilot, Gemini CLI and other agents
+### Cursor
+
+The Telmoni plugin is not in the Cursor Marketplace yet. Until it is, clone this repository into Cursor's local plugins folder, then restart Cursor or run **Developer: Reload Window**:
+
+```console
+git clone https://github.com/telmoni/skills.git ~/.cursor/plugins/local/telmoni
+```
+
+`git pull` in that folder, then a reload, brings a newer version. Cursor skips a symlink to a clone elsewhere, so clone into the folder itself. On Teams and Enterprise plans, admins allow local plugins with **Allow Local Plugin Imports**, which is off by default on Enterprise.
+
+### OpenCode, Copilot, Gemini CLI and other agents
 
 The [skills CLI](https://github.com/vercel-labs/skills) installs the skill into the agents it finds in your project; `-a <agent>` picks one (`opencode`, `antigravity`, `cursor`, `github-copilot`, `gemini-cli`, …), and `-g` installs it for your user instead:
 
@@ -75,6 +85,8 @@ ln -s "$PWD/telmoni-skills/skills/telmoni" ~/.claude/skills/telmoni
 skills/          one directory per skill: SKILL.md and its references/
 evals/           the cases the skills are tested against, with and without them (claude plugin eval)
 .claude-plugin/  the Claude Code plugin, and the marketplace that installs it
+.codex-plugin/   the listing card for Codex releases before 0.146, which don't read plugin.json
+.cursor-plugin/  the Cursor plugin
 plugin.json      the Agent Plugins manifest, for Codex, Antigravity, Cursor, VS Code and Copilot, and its listing for OpenAI's plugin directory
 Makefile         make check, the gate CI runs; make eval, the eval suite
 ```

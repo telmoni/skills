@@ -1,0 +1,15 @@
+{
+  "name": "telmoni",
+  "displayName": "Telmoni",
+  "description": "Skills for working with Telmoni: the telmoni CLI, API keys and the read-only /v1 API, signed webhooks, and self-hosting with Docker Compose or Kubernetes.",
+  "author": {
+    "name": "Telmoni",
+    "email": "hello@telmoni.com"
+  },
+  "homepage": "https://telmoni.com/docs",
+  "repository": "https://github.com/telmoni/skills",
+  "license": "Apache-2.0",
+  "keywords": ["telmoni", "cli", "api-keys", "webhooks", "self-hosting"],
+  "category": "developer-tools",
+  "skills": "./skills/"
+}

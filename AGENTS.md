@@ -16,6 +16,8 @@ The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skil
 | `skills/<name>/references/` | One file per use case, opened only when `SKILL.md` routes there. |
 | `evals/<case>/` | One case for `claude plugin eval`: `prompt.md` (the request as a person would type it, and its run limits), `graders/` (the checks), and for a case that needs a starting project, `case.yaml` and `scaffold.sh`. Outside `skills/`, so an install never copies them. |
 | `.claude-plugin/` | `plugin.json`, the Claude Code plugin, and `marketplace.json`, which makes this repository its own marketplace; Codex and Copilot read that marketplace too. |
+| `.codex-plugin/` | `plugin.json`, the Codex manifest for releases before 0.146, which read no root `plugin.json`; its `interface` is a copy of `plugin.json`'s `extensions["com.openai"].interface`, which later releases read instead. |
+| `.cursor-plugin/` | `plugin.json`, the Cursor plugin manifest, checked against Cursor's schema. |
 | `plugin.json` | The [Agent Plugins](https://agent-plugins.org) manifest, which Codex prefers and Antigravity, Cursor, VS Code and Copilot read; its `extensions["com.openai"]` block is the listing OpenAI's plugin directory shows ChatGPT users. |
 | `Makefile` | `check`, the gate, and `eval`, the eval suite. |
 | `.github/workflows/ci.yml` | CI: `make check` and actionlint. |
@@ -24,7 +26,7 @@ The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skil
 | [`telmoni/telmoni-cli`](https://github.com/telmoni/telmoni-cli) | Sibling repo, checked out as `../telmoni-cli`: the CLI and SDKs, and the authority on their commands, flags and variables. |
 
 ## Commands
-- **After every change** (no permission needed; report failures verbatim): `make check`, which validates each skill against the Agent Skills spec (`skills-ref`), `plugin.json` against the Agent Plugins schema, and the Claude Code plugin and marketplace (`claude plugin validate .`). It needs `uv` and Claude Code. Its one expected warning is the missing `version` (Versioning).
+- **After every change** (no permission needed; report failures verbatim): `make check`, which validates each skill against the Agent Skills spec (`skills-ref`), `plugin.json` against the Agent Plugins schema, `.cursor-plugin/plugin.json` against Cursor's, and the Claude Code plugin and marketplace (`claude plugin validate .`). It needs `uv` and Claude Code. Its one expected warning is the missing `version` (Versioning).
 - **Only when asked**, since it spends model usage: `make eval`, or one case with `make eval CASE=<case> RUNS=1`. On Linux the runs need `bubblewrap` and `socat` for Claude Code's sandbox. Unasked, say "untested" and name the command.
 - **Locally:** `claude --plugin-dir .` starts a Claude Code session with this checkout's plugin loaded. `agy plugin install .` installs it into Antigravity; `agy plugin validate` reads only `plugin.json`, so it is no check of a skill and is not in the gate.
 
@@ -52,7 +54,7 @@ These files restate code and pages; when those change, the skill follows. Every 
 - `evals/`: the same sources as the reference each case exercises; a grader that pins a fact (the webhook test vector, an error type) changes with it.
 
 ## Versioning
-No manifest carries a `version` before launch. Claude Code then versions the plugin by commit, so an update always brings the latest skills, where a `version` left unbumped would pin every user to the copy they first installed. That is why `claude plugin validate` warns and `make check` runs it without `--strict`. At launch, if releases should be pinned, `.claude-plugin/plugin.json` and `plugin.json` get the same `version` (never the marketplace entry), and every change to what a skill does bumps both.
+No manifest carries a `version` before launch. Claude Code then versions the plugin by commit, so an update always brings the latest skills, where a `version` left unbumped would pin every user to the copy they first installed. That is why `claude plugin validate` warns and `make check` runs it without `--strict`. At launch, if releases should be pinned, every manifest — `.claude-plugin/plugin.json`, `plugin.json`, `.codex-plugin/plugin.json` and `.cursor-plugin/plugin.json` — gets the same `version` (never the marketplace entry), and every change to what a skill does bumps them all.
 
 ## Testing a Change
 A skill is tested on the agents it ships to: a sentence that reads clearly in a diff can still steer an agent wrong mid-task.
