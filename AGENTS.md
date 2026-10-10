@@ -50,7 +50,7 @@ These files restate code and pages; when those change, the skill follows. Every 
 - `references/cli.md`: commands, flags, variables and output in `src/` of `telmoni/telmoni-cli`, and `api/cli.mdx`.
 - `references/api.md`: `crates/auth/src/handler/v1.rs`, `crates/auth/src/handler/tokens.rs`, `web/app/v1/[...path]/route.ts` and the error types in `crates/shared/src/error.rs` in `telmoni/telmoni`, `sdk/` in `telmoni/telmoni-cli`, and `api/reference.mdx`, `api/api-keys.mdx`, `api/sdks.mdx` and `errors.mdx`.
 - `references/webhooks.md`: `crates/notifications/src/connector/webhook.rs`, `crates/notifications/src/delivery.rs` and `web/lib/webhook-signature.ts` in `telmoni/telmoni`, and `integrations/webhooks.mdx`.
-- `references/self-host.md`: `deploy/` and the binary's subcommands (`crates/telmoni/src/cli.rs`) in `telmoni/telmoni`, and the `self-host/` pages.
+- `references/self-host.md`: `deploy/`, `crates/telemetry/clickhouse/`, `crates/migrator/sql/role_hardening.sql` and the binary's subcommands (`crates/telmoni/src/cli.rs`) in `telmoni/telmoni`, and the `self-host/` pages.
 - `evals/`: the same sources as the reference each case exercises; a grader that pins a fact (the webhook test vector, an error type) changes with it.
 
 ## Versioning
