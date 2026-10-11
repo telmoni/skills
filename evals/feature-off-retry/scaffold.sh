@@ -9,7 +9,7 @@ import sys
 
 import requests
 
-ENDPOINT = os.environ.get("TELMONI_ENDPOINT", "https://telmoni.com")
+ENDPOINT = os.environ.get("TELMONI_ENDPOINT", "https://api.telmoni.com")
 
 
 def fetch_members():

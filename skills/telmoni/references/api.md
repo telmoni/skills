@@ -34,8 +34,8 @@ Every error on `/v1` is an RFC 9457 problem document (`application/problem+json`
 | `401` `/errors/auth/invalid-token` | The key is revoked, expired or unknown, or its organization is being deleted. Stop; the user mints or rotates a key in the console. |
 | `429` `/errors/tenant/rate-limited` | Wait for `Retry-After`. The limits are 600 requests a minute per key and 1,200 per source address. |
 | `503` `/errors/tenant/feature-off` | The API is switched off for the organization or the deployment; the route still exists, and the `flag` field names the switch. Wait for `Retry-After` and retry; tell the user if it persists. |
-| `503` `/errors/upstream-unavailable` or `/errors/auth/identity-unavailable` | Retry with backoff. On a self-hosted deployment, the first persisting can mean the console's `SERVICE_SECRET` no longer matches the server's; the second, that the server cannot reach its database. |
-| `404` `/errors/auth/not-found` | No such route under `/v1`. |
+| `503` `/errors/auth/identity-unavailable` | Retry with backoff: the server could not read its database while checking the key. One that persists on a self-hosted deployment means the server cannot reach Postgres. |
+| `404` `/errors/not-found` | No such route under `/v1`. `/errors/auth/not-found` is a different answer: a lane that looked for something and did not find it. |
 
 ## Rotating a key
 
