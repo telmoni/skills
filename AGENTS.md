@@ -1,6 +1,6 @@
 # Telmoni Skills — Agent Guidelines
 
-The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skills)): instructions that coding agents (Claude Code, Codex, Cursor and any other that reads `SKILL.md`) load to work with Telmoni on a person's behalf. Every skill restates what the platform ([`telmoni/telmoni`](https://github.com/telmoni/telmoni)) and the CLI and SDKs ([`telmoni/telmoni-cli`](https://github.com/telmoni/telmoni-cli)) do, and routes the agent to the docs at [telmoni.com/docs](https://telmoni.com/docs) (the platform's book, `web/content/docs`) for the rest; those repositories are the authority on everything written here. The repository is public, and every file in it is published as written.
+The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skills)): instructions that coding agents (Claude Code, Codex, Cursor and any other that reads `SKILL.md`) load to work with Telmoni on a person's behalf. Every skill restates what the platform and its SDKs ([`telmoni/telmoni`](https://github.com/telmoni/telmoni)) and the CLI ([`telmoni/telmoni-cli`](https://github.com/telmoni/telmoni-cli)) do, and routes the agent to the docs at [telmoni.com/docs](https://telmoni.com/docs) (the book, [`telmoni/docs`](https://github.com/telmoni/docs)) for the rest; those repositories are the authority on everything written here. The repository is public, and every file in it is published as written.
 
 ## Ground Rules
 - **Pre-launch:** nothing has shipped. Rename, restructure and rewrite skills to their ideal state; no deprecated names, redirects or migration notes.
@@ -23,8 +23,9 @@ The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skil
 | `.github/workflows/ci.yml` | CI: `make check` and actionlint, and on `main` the `publish` job. |
 | `release` branch | What every install fetches: the manifests, `skills/`, `LICENSE` and `NOTICE`, which the `publish` job copies from `main` as a commit on the last, so a clone's `git pull` fast-forwards. Never edit or push it by hand; a new file an agent loads joins the job's `cp` line in the same change. |
 | `scratch/` | The maintainer's notes, gitignored. Never write to it. |
-| [`telmoni/telmoni`](https://github.com/telmoni/telmoni) | Sibling repo, checked out as `../telmoni`: the platform, the authority on the API, webhooks, errors and self-hosting, and its book (`web/content/docs`), which telmoni.com/docs serves with the hosted service's own pages (billing, legal) beside it: the pages every skill links to. |
-| [`telmoni/telmoni-cli`](https://github.com/telmoni/telmoni-cli) | Sibling repo, checked out as `../telmoni-cli`: the CLI and SDKs, and the authority on their commands, flags and variables. |
+| [`telmoni/telmoni`](https://github.com/telmoni/telmoni) | Sibling repo, checked out as `../telmoni`: the platform and the four SDKs under `sdk/`, the authority on the API, the SDKs, webhooks, errors and self-hosting, and the console that serves the book. |
+| [`telmoni/docs`](https://github.com/telmoni/docs) | Sibling repo, checked out as `../docs`: the book, `content/`, which every console serves at `/docs`, and the hosted service's own pages (billing, legal), `hosted/`, which telmoni.com/docs serves beside it: the pages every skill links to. |
+| [`telmoni/telmoni-cli`](https://github.com/telmoni/telmoni-cli) | Sibling repo, checked out as `../telmoni-cli`: the CLI, and the authority on its commands, flags and variables. |
 
 ## Commands
 - **After every change** (no permission needed; report failures verbatim): `make check`, which validates each skill against the Agent Skills spec (`skills-ref`), `plugin.json` against the Agent Plugins schema, `.cursor-plugin/plugin.json` against Cursor's, and the Claude Code plugin and marketplace (`claude plugin validate .`). It needs `uv` and Claude Code. Its one expected warning is the missing `version` (Versioning).
@@ -46,10 +47,10 @@ Read every file as its runtime reader does: an agent in the middle of someone's 
 - **Every skill carries `license: Apache-2.0`** in its frontmatter: an install copies the skill's directory without this repository's `LICENSE`.
 
 ## Contracts
-These files restate code and pages; when those change, the skill follows. Every `.mdx` named here is under `web/content/docs` in `telmoni/telmoni`.
-- `skills/telmoni/SKILL.md`, the documentation table: the book's sidebar as telmoni.com/docs serves it, the `meta.json` files under `web/content/docs` with the hosted service's own pages (billing, legal) beside them.
+These files restate code and pages; when those change, the skill follows. Every `.mdx` named here is under `content/` in `telmoni/docs`.
+- `skills/telmoni/SKILL.md`, the documentation table: the book's sidebar as telmoni.com/docs serves it, the `meta.json` files under `content/` in `telmoni/docs` with the hosted service's own pages (`hosted/`: billing, legal) beside them.
 - `references/cli.md`: commands, flags, variables and output in `src/` of `telmoni/telmoni-cli`, and `api/cli.mdx`.
-- `references/api.md`: `crates/auth/src/handler/v1.rs`, `crates/auth/src/handler/tokens.rs`, `web/app/v1/[...path]/route.ts` and the error types in `crates/shared/src/error.rs` in `telmoni/telmoni`, `sdk/` in `telmoni/telmoni-cli`, and `api/reference.mdx`, `api/api-keys.mdx`, `api/sdks.mdx` and `errors.mdx`.
+- `references/api.md`: `crates/auth/src/handler/v1.rs`, `crates/auth/src/handler/tokens.rs`, `web/app/v1/[...path]/route.ts` and the error types in `crates/shared/src/error.rs` and `sdk/` in `telmoni/telmoni`, and `api/reference.mdx`, `api/api-keys.mdx`, `api/sdks.mdx` and `errors.mdx`.
 - `references/webhooks.md`: `crates/notifications/src/connector/webhook.rs`, `crates/notifications/src/delivery.rs` and `web/lib/webhook-signature.ts` in `telmoni/telmoni`, and `integrations/webhooks.mdx`.
 - `references/self-host.md`: `deploy/`, `crates/telemetry/clickhouse/`, `crates/migrator/sql/role_hardening.sql` and the binary's subcommands (`crates/telmoni/src/cli.rs`) in `telmoni/telmoni`, and the `self-host/` pages.
 - `evals/`: the same sources as the reference each case exercises; a grader that pins a fact (the webhook test vector, an error type) changes with it.
