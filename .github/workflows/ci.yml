@@ -1,4 +1,5 @@
-# CI: the skills against the Agent Skills spec, and the plugin manifests against their clients.
+# CI: the skills against the Agent Skills spec, the plugin manifests against their clients, and,
+# on main, the release branch every install fetches.
 name: CI
 
 on:
@@ -61,10 +62,48 @@ jobs:
       - name: actionlint
         run: ./actionlint -color
 
+  # Every install fetches the release branch, so a person downloads what an agent loads and
+  # nothing else: no evals, scaffold scripts, Makefile or workflows.
+  publish:
+    name: publish the plugin to the release branch
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [check, lint-workflows]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # The one job that pushes, and only to the release branch.
+          persist-credentials: true
+
+      - name: Publish what ships
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          release="$RUNNER_TEMP/release"
+          # Each publish is a commit on the last, so a clone's `git pull` fast-forwards.
+          if git fetch --depth 1 origin release; then
+            git worktree add -b release "$release" FETCH_HEAD
+          else
+            git worktree add --orphan -b release "$release"
+          fi
+          git -C "$release" rm -rq --ignore-unmatch .
+          cp -a .claude-plugin .codex-plugin .cursor-plugin plugin.json skills LICENSE NOTICE "$release/"
+          git -C "$release" add -A
+          if git -C "$release" diff --cached --quiet; then
+            echo "The release branch already holds this commit's plugin."
+            exit 0
+          fi
+          git -C "$release" commit -q -m "$(git log -1 --format=%s)" -m "Published from ${GITHUB_SHA}."
+          git -C "$release" push origin release
+
   ci-status:
     name: CI status
     if: always()
-    needs: [check, lint-workflows]
+    needs: [check, lint-workflows, publish]
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:

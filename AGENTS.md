@@ -14,13 +14,14 @@ The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skil
 |---|---|
 | `skills/<name>/SKILL.md` | A skill: its frontmatter (`name`, `description`, `license`, `allowed-tools`; nothing outside the Agent Skills spec) and the body every invocation loads. |
 | `skills/<name>/references/` | One file per use case, opened only when `SKILL.md` routes there. |
-| `evals/<case>/` | One case for `claude plugin eval`: `prompt.md` (the request as a person would type it, and its run limits), `graders/` (the checks), and for a case that needs a starting project, `case.yaml` and `scaffold.sh`. Outside `skills/`, so an install never copies them. |
+| `evals/<case>/` | One case for `claude plugin eval`: `prompt.md` (the request as a person would type it, and its run limits), `graders/` (the checks), and for a case that needs a starting project, `case.yaml` and `scaffold.sh`. Never on the `release` branch, so no install downloads them. |
 | `.claude-plugin/` | `plugin.json`, the Claude Code plugin, and `marketplace.json`, which makes this repository its own marketplace; Codex and Copilot read that marketplace too. |
 | `.codex-plugin/` | `plugin.json`, the Codex manifest for releases before 0.146, which read no root `plugin.json`; its `interface` is a copy of `plugin.json`'s `extensions["com.openai"].interface`, which later releases read instead. |
 | `.cursor-plugin/` | `plugin.json`, the Cursor plugin manifest, checked against Cursor's schema. |
 | `plugin.json` | The [Agent Plugins](https://agent-plugins.org) manifest, which Codex prefers and Antigravity, Cursor, VS Code and Copilot read; its `extensions["com.openai"]` block is the listing OpenAI's plugin directory shows ChatGPT users. |
 | `Makefile` | `check`, the gate, and `eval`, the eval suite. |
-| `.github/workflows/ci.yml` | CI: `make check` and actionlint. |
+| `.github/workflows/ci.yml` | CI: `make check` and actionlint, and on `main` the `publish` job. |
+| `release` branch | What every install fetches: the manifests, `skills/`, `LICENSE` and `NOTICE`, which the `publish` job copies from `main` as a commit on the last, so a clone's `git pull` fast-forwards. Never edit or push it by hand; a new file an agent loads joins the job's `cp` line in the same change. |
 | `scratch/` | The maintainer's notes, gitignored. Never write to it. |
 | [`telmoni/telmoni`](https://github.com/telmoni/telmoni) | Sibling repo, checked out as `../telmoni`: the platform, the authority on the API, webhooks, errors and self-hosting, and its book (`web/content/docs`), which telmoni.com/docs serves with the hosted service's own pages (billing, legal) beside it: the pages every skill links to. |
 | [`telmoni/telmoni-cli`](https://github.com/telmoni/telmoni-cli) | Sibling repo, checked out as `../telmoni-cli`: the CLI and SDKs, and the authority on their commands, flags and variables. |
