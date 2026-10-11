@@ -3,7 +3,7 @@
 [![CI](https://github.com/telmoni/skills/actions/workflows/ci.yml/badge.svg)](https://github.com/telmoni/skills/actions/workflows/ci.yml)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
-[Agent Skills](https://agentskills.io) that teach coding agents (Claude Code, Codex and ChatGPT, OpenCode, Antigravity, Cursor and any other that reads `SKILL.md`) to work with [Telmoni](https://github.com/telmoni/telmoni): the SDKs that record an agent's runs and the ingest they send to, the `telmoni` CLI, API keys and the read-only `/v1` API, signed webhooks, and self-hosting. A skill sends the agent to [telmoni.com/docs](https://telmoni.com/docs) for the details and adds what the pages alone don't give it: which path fits which situation, the mistakes agents make, and the guardrails around keys and someone's infrastructure.
+[Agent Skills](https://agentskills.io) that teach coding agents (Claude Code, Codex and ChatGPT, OpenCode, Antigravity, Cursor and any other that reads `SKILL.md`) to work with [Telmoni](https://github.com/telmoni/telmoni): the SDKs that record the runs of the agents you build and the ingest they send to, the `telmoni` CLI, API keys and the read-only `/v1` API, signed webhooks, and self-hosting. A skill sends the agent to [telmoni.com/docs](https://telmoni.com/docs) for the details and adds what the pages alone don't give it: which path fits which situation, the mistakes agents make, and the guardrails around keys and someone's infrastructure.
 
 Telmoni has not launched yet, and the skills cover what a user can reach today.
 
