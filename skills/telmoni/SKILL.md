@@ -15,7 +15,7 @@ allowed-tools:
 
 # Telmoni
 
-Telmoni records AI agents' runs as metadata — each run's steps, model and tool calls, tokens, timings and outcome, never a prompt or a completion — and runs the organizations and projects they belong to: members and roles, API keys, notifications to Slack and webhooks, a hash-chained audit log and a console agent. People use it through a web console, where a project's runs are read as traces, conversations and users, the `telmoni` CLI, the SDKs and a read-only HTTP API, on the hosted service at `https://telmoni.com` or on a deployment they run themselves. It has not launched, so its surface is small and changes often.
+Telmoni records AI agents' runs as metadata — each run's steps, model and tool calls, tokens, timings and outcome, never a prompt or a completion — and runs the organizations and projects they belong to: members and roles, API keys, notifications to Slack and webhooks, a hash-chained audit log and a console agent. People use it through a web console, where a project's runs are read as traces, sessions and users, the `telmoni` CLI, the SDKs and a read-only HTTP API, on the hosted service at `https://telmoni.com` or on a deployment they run themselves. It has not launched, so its surface is small and changes often.
 
 ## Ground rules
 
@@ -43,7 +43,7 @@ Pages are at `https://telmoni.com/docs/<path>`, served by the console itself; fe
 |---|---|
 | Introduction, signing in | the book's root (`/docs`), `getting-started/sign-in` |
 | Organizations, projects, members, roles | `workspace/organizations-and-projects`, `workspace/members`, `workspace/roles` |
-| Traces, conversations, users: a project's runs in the console | `workspace/traces`, `workspace/conversations`, `workspace/users` |
+| Traces, sessions, users: a project's runs in the console | `workspace/traces`, `workspace/sessions`, `workspace/users` |
 | Audit log, billing on the hosted service | `workspace/audit-log`, `workspace/billing` |
 | How long each kind of data is kept, and what a deletion removes | `workspace/data-retention`, `workspace/data-deletion` |
 | Notifications, Slack, webhooks | `integrations/notifications`, `integrations/slack`, `integrations/webhooks` |
