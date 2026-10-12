@@ -1,0 +1,41 @@
+---
+description: Self-host Telmoni — choose Docker Compose or the Helm chart, write its environment and secrets, start, verify and upgrade it, set up sign-in, the console agent and production hardening, and run the operator subcommands.
+---
+
+# Self-hosting Telmoni
+
+Start at https://telmoni.com/docs/self-host/overview, then follow the page for the method: `self-host/docker-compose` for one host, to evaluate or serve a small company; `self-host/kubernetes` for the Helm chart. `self-host/configuration` lists every variable the server and console read (the Compose stack's own, such as `POSTGRES_PASSWORD` and the image tags, are on `self-host/docker-compose`), and `self-host/production` covers OIDC, database roles, partition rotation, backups and what the server refuses at boot.
+
+## Before changing anything
+
+- Starting, stopping or deleting a stack, `helm install` or `upgrade`, `kubectl apply`, and DNS, TLS or cloud KMS changes alter the user's infrastructure: say what will run and wait for a yes. `docker compose … down -v` deletes every organization's data.
+- The published images (`ghcr.io/telmoni/server`, `ghcr.io/telmoni/web`) are `linux/amd64` only.
+- On Compose every module connects as the database superuser, which row-level security does not bind, and the server reads ClickHouse as the user that ran its migration, which the row policy does not hold. Production runs the per-module roles that `self-host/production` sets up, and two ClickHouse users (`self-host/kubernetes`).
+
+## Docker Compose
+
+- The compose file works only inside a clone of `telmoni/telmoni`, which it mounts files from, and reads `deploy/compose/.env`. Write that file from scratch with the keys the Compose page lists: the repository's root `.env.example` belongs to the development stack and points at services this one doesn't run.
+- Generate each secret straight into the file, so the value never reaches your output: `printf 'AUTH_SECRET=%s\n' "$(openssl rand -hex 32)" >> deploy/compose/.env`, and the same for `SERVICE_SECRET`, `POSTGRES_PASSWORD` and `CLICKHOUSE_PASSWORD`, and `printf 'TELEMETRY_KEK=local:%s\n' "$(openssl rand -hex 32)" >> deploy/compose/.env`: the stack won't start without any of the five, and the two passwords go into connection URLs, so keep to the hex `openssl` prints. `CONNECTOR_KEK` is `local:` followed by the same command's output, like `TELEMETRY_KEK`.
+- Afterwards, check that a key is set with `grep -c '^AUTH_SECRET=' deploy/compose/.env` rather than printing or diffing the file.
+- After changing the env file, `docker compose -f deploy/compose/docker-compose.yml up -d <service>` recreates the container; `restart` keeps its old environment.
+- `latest` moves. For anything long-lived, pin `TELMONI_IMAGE_SERVER` and `TELMONI_IMAGE_WEB` to the commit-SHA tags.
+- The console is published on `3000` (every interface) and the server on `127.0.0.1:8082`, for the machine lanes — ingest at `/otlp/v1/traces`, where the SDKs send; the read API under `/v1`; the CLI's sign-in under `/cli`; Slack's events at `/webhooks/slack`. The reverse proxy on the host forwards those four there, by path on the console's host or on a host of its own, and nothing else of `8082` (`self-host/production`, *Reverse proxy configuration*); an SDK on the host itself may use `http://localhost:8082` as its endpoint.
+
+## Kubernetes
+
+- The chart expects what it doesn't create: PostgreSQL 17 with the `vector` extension (pgvector 0.8 or later) installed by a superuser, which the migrations need even with the console agent off, the five login roles hardened with `role_hardening.sql`, a single-endpoint Redis 7 (no Cluster mode), a route to the `web` Service and one to the `server-api` Service for the machine lanes (`/otlp`, `/v1`, `/cli` and `/webhooks/slack`), and `DATABASE_CA_CERT` in both `server-secrets` and `migrator-secrets`. With the chart's own Gateway on, `ingress.apiHost` routes the lanes on a host of their own, whose certificate the map must hold too and which is then the SDKs' endpoint; empty, they are routed by path on the console's host.
+- It needs a ClickHouse too, one node over its HTTP interface, with two users of its own: `telemetry` for the server (`TELEMETRY_CLICKHOUSE_URL` in `server-secrets`) and `migrator` for the migration and rotation (`MIGRATOR_CLICKHOUSE_URL` in `migrator-secrets`), each URL carrying its password percent-encoded. They must be two: the migration's row policies hold every user but the one that ran it to the projects a read names, and let that one read every row. In a pod each URL is `https` with a certificate a public CA signed, or plain `http` to a Service's name with its namespace (`clickhouse.<namespace>.svc`, `….svc.cluster.local`) or loopback, never a bare `clickhouse`; `http` to any other host is refused at boot. The users' grants are the ones `crates/telemetry/clickhouse/dev-users.xml` names, never `ALL ON telemetry.*`, and ClickHouse runs `crates/telemetry/clickhouse/low-memory.xml` whole.
+- In a pod, `TELEMETRY_KEK` (`config.telemetryKek`) and `CONNECTOR_KEK` (`config.connectorKek`) must each be a Cloud KMS key name that the server reaches through GKE Workload Identity: a `local:` key and the chart's defaults are refused, so the server won't boot until they're set. Off GKE, `connectorKek` may be `""`, which runs without connectors (webhooks and Slack); `telemetryKek` has no such off, since every span's user id is hashed under it. The server also reads `REDIS_URL` from `server-secrets`, the console's Redis, for ingest's claims and rate limits. `TELEMETRY_DOGFOOD_PROJECT_ID` (`config.dogfoodProjectId`, empty by default) is optional: set to the id of a project of the operator's own, the console agent's questions are recorded as runs of it — each question a run, its model and tool calls spans, the asking organization its user, hashed, never a word anyone wrote; unset, they are recorded nowhere.
+- A `helm upgrade` that changes only values under `config`, or a changed Secret, restarts no pod: follow it with `kubectl rollout restart deployment -n telmoni`.
+
+## When it won't start
+
+The server checks its whole environment at boot and exits with the reason in its log. Read it (`docker compose -f deploy/compose/docker-compose.yml logs server`, or `kubectl logs` on the server or migration pod), then find the rule under "What the server refuses at boot" on `self-host/production`. On Compose, `ps -a` shows the one-shot `migrate` container `Exited (0)` once migrations ran; any other exit stops `server` from starting.
+
+## Hardening and operating
+
+- `ADMIN_EMAIL` and `ADMIN_PASSWORD` only bootstrap the first account. For production, connect OIDC, remove both, then set `DISABLE_LOGIN_FORM=true`: the server refuses to boot with that switch and either variable set.
+- `CONNECTOR_KEK` decrypts every connector's secrets, and `TELEMETRY_KEK` the key each project's user ids are hashed under. A `local:` key has to be backed up with the database dumps, and a Cloud KMS key must never be disabled or destroyed: without either, connector credentials stop decrypting and stored user ids stop matching new ones.
+- A change the audit log records fails when its month has no partition; the first `telmoni migrate` creates this month and the next three, and nothing adds more until `rotate` runs. On Compose, schedule `docker compose -f deploy/compose/docker-compose.yml run --rm migrate rotate` daily, so the runway keeps moving, each day of spans goes once it passes retention and the rows a deleted project left are rewritten off the disk; the chart runs it daily.
+- `telmoni terminate <org id>` closes an organization at once, and nobody can undo it: the next deletion sweep past its short wait erases it. Confirm the organization with the user before running it; `self-host/production` covers it and the sweeps, `audit-exports` among them.
+- The console agent is off until `AGENT_MODEL_PROVIDER` is set. `self-host/agent` covers models and embeddings (768 dimensions). The agent indexes its own console's documentation (`/llms-full.txt` on the deployment's origin), so nothing leaves the deployment for it; `DOCS_CORPUS_URL` names another corpus, and `off` indexes none.
