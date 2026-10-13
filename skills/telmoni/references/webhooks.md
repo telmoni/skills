@@ -18,7 +18,7 @@ Fetch https://telmoni.com/docs/integrations/webhooks before writing code, and po
 ## Answer
 
 - Return a 2xx as soon as the event is stored and do the work afterwards: the request has a ten-second budget, and anything but a 2xx is retried, by default five attempts over about 45 minutes.
-- Redirects are not followed, so a `3xx` (an HTTPS or trailing-slash redirect) is a failed send: connect the final URL.
+- Redirects are not followed, so a `3xx` (a trailing slash added, a host that moved) is a failed send: connect the final URL.
 - Deduplicate on `Telmoni-Delivery-Id`, which equals the body's `id` and repeats across retries and manual resends.
 - Answer a `kind` the receiver doesn't handle with a 2xx. **All events** includes kinds added later, an error turns each into five failed attempts, and ten failed sends in a row mark the webhook **Needs attention**.
 - Return `410` only for an endpoint that is gone for good. One `410` marks the webhook **Needs attention** at once and fails its queue, and nothing raised until someone rotates its secret is ever delivered. During a deploy or a move, answer `404` or `503` and let the retries carry it.
@@ -27,6 +27,6 @@ Fetch https://telmoni.com/docs/integrations/webhooks before writing code, and po
 
 1. Unit-test the verifier with the test vector on the webhooks page (secret, header, body and `t`), copied from the page rather than from memory, with the body as that exact string rather than an object you serialise: it must accept the triple with the clock fixed at that `t`, and refuse it with one byte of the body changed.
 2. End to end: connecting refuses `http://`, loopback, private and link-local addresses and names such as `localhost` or `*.internal`, with no development override. Expose the local receiver through a public HTTPS tunnel (for example `cloudflared tunnel --url http://localhost:<port>`), connect that URL on the project's **Connectors** page (`/{organization}/{project}/connectors`), and select **Send test**, which posts one signed `connector_connected` body.
-3. A quick tunnel's URL changes on every run, and a project connects a URL once (a second time is `409`): disconnect the old row and connect the new URL.
+3. A quick tunnel's URL changes on every run: disconnect the old row, whose sends now fail, and connect the new URL (the same URL connected twice is `409`).
 
 The Connectors page keeps each delivery's attempts, statuses and timing for 30 days, and **Resend** replays a delivery with its original `Telmoni-Delivery-Id`.

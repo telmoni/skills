@@ -8,7 +8,7 @@ Every command, flag, variable and output field is on https://telmoni.com/docs/ap
 
 ## Install
 
-Run `telmoni --version` first. If it's missing, the installer on the CLI page serves Apple-silicon macOS and x86_64 Linux with glibc; on an Intel Mac, ARM64 Linux or Alpine, build from source with the page's `cargo install` line instead. In a non-interactive shell, set `TELMONI_INSTALL_DIR` to an existing, writable directory: otherwise the installer calls `sudo` or `doas`, even to create `~/.local/bin`. The CLI is on no package registry, so a `telmoni` package found on one is not Telmoni's.
+Run `telmoni --version` first. If it's missing, build it from source with the CLI page's `cargo install` line: no release has been cut, so the page's installer has nothing to fetch. The CLI is on no package registry, so a `telmoni` package found on one is not Telmoni's.
 
 ## Sign in: choose by where it runs
 
@@ -20,7 +20,7 @@ Run `telmoni --version` first. If it's missing, the installer on the CLI page se
 
 - `telmoni login` prints a one-time code and an address, then blocks, polling for up to ten minutes until a person approves the code. Started in your foreground shell, nobody sees the code, and a tool timeout kills it with nothing saved. If the user wants you to drive it, start `telmoni login --no-browser` in the background with its output going to a file, relay the code and address it prints (they are meant to be shown), and wait for it to exit 0.
 - While `TELMONI_API_KEY` holds a key, even a stale one, every command that acts with a key uses it ahead of the saved login; `login`, `logout` and `org` say so on stderr. A blank value counts as unset.
-- A key is checked only for its shape (`telmoni_…`); `telmoni status` is what proves it works.
+- A key is checked only for its shape (`telmoni_…`); `telmoni status` proves it by asking `GET /v1/organization`, which takes the `read` scope: a key holding only `ingest` gets `403` there and still sends spans.
 - A key reaches only the API: `status` works, while `org list` and `org switch` need a device sign-in.
 - To save a key instead, pipe it to `telmoni login --with-key` from a file or a secret store, never as an argument; it refuses a terminal. To fetch one from a secret manager for each command, the user sets `telmoni config set api_key_helper '<command>'`, a command that prints the key. Signing in again replaces the saved credentials without ending the earlier session; `telmoni logout` first ends it.
 
@@ -35,12 +35,12 @@ Run `telmoni --version` first. If it's missing, the installer on the CLI page se
 
 ## Self-hosted endpoints
 
-The endpoint is chosen at `login`, from `--endpoint`, then `TELMONI_ENDPOINT`, then `telmoni config set endpoint`, then `https://api.telmoni.com`, the machine host. A self-hosted deployment's endpoint is its own machine host, or its console's host where the machine lanes are routed by path (`self-host/production`, *Reverse proxy configuration*); never a bare console that routes none of them. A saved session keeps the endpoint it signed in to, so moving to another deployment means `telmoni logout`, then `telmoni login --endpoint <origin>`. The CLI sends credentials only over HTTPS, except to localhost or a loopback address, which it reaches past any proxy.
+The endpoint is chosen at `login`, from `--endpoint`, then `TELMONI_ENDPOINT`, then `telmoni config set endpoint`, then `https://api.telmoni.com`, the machine host. A key in `TELMONI_API_KEY` or from `api_key_helper` signs nothing in, so every command takes `TELMONI_ENDPOINT`, then the setting, then the default; `status` has no `--endpoint`, so key-only CI against a self-hosted deployment sets `TELMONI_ENDPOINT`. A self-hosted deployment's endpoint is its own machine host, or its console's host where the machine lanes are routed by path (`self-host/production`, *Reverse proxy configuration*); never a bare console that routes none of them. A saved session keeps the endpoint it signed in to, so moving to another deployment means `telmoni logout`, then `telmoni login --endpoint <origin>`. The CLI sends credentials only over HTTPS, except to localhost or a loopback address, which it reaches past any proxy.
 
 ## When it fails
 
 - `-v` after the subcommand (`telmoni status -v`) logs to stderr where the CLI read and wrote the saved login and each request's method, address and status, never a header, token or key; at `login` it also says where the endpoint came from.
-- `session ended; run telmoni login` means the session was ended (signed out elsewhere, ended from **Active sessions**, or 30 days unused) and the CLI already deleted its credentials: the user signs in again.
+- `session ended; run telmoni login` means the session was ended (from **Active sessions**, by a password reset or an email change, or after 30 days unused) and the CLI already deleted its credentials: the user signs in again.
 - The CLI needs network access to the endpoint and must write refreshed tokens to the Keychain on a Mac, else to its configuration directory; in a sandbox that blocks the write, a refresh it cannot save ends the session.
 - Behind a proxy that intercepts TLS, certificate errors follow: the CLI trusts only its bundled root certificates, not the system store or `SSL_CERT_FILE`.
-- Never open, print or copy the saved login: on a Mac the Keychain item `telmoni`, elsewhere the credentials file (`telmoni/credentials.json` in the user's configuration directory), which holds a refresh token or an API key unencrypted. `telmoni status` says what it holds.
+- Never open, print or copy the saved login: the Keychain item `telmoni` on a Mac, and the credentials file (`telmoni/credentials.json` in the user's configuration directory), which holds a refresh token or an API key unencrypted, on Linux and on a Mac whose Keychain refused it, as a locked one does over SSH or in a shell with no terminal, yours included. `telmoni status` says what it holds.

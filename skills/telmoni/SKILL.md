@@ -23,7 +23,7 @@ Telmoni records AI agents' runs as metadata — each run's steps, model and tool
 2. **Only what exists.** The API reads two things and writes nothing; the SDKs (Python, TypeScript, Go, Rust) record runs, steps, model calls and tool calls and send them to ingest at `/otlp/v1/traces`, which keeps a span only inside a run marked with `telmoni.run_id` and `telmoni.agent`, as the SDKs mark theirs and no stock exporter does; none is on a package registry yet (`references/api.md`). The SDKs go into the code of agents the user builds: Telmoni records no coding agent's own sessions, yours included, so say so rather than wiring an agent's hooks to an SDK, since a hook reads the person's prompts and files. Telmoni has no monitors or alerts: the bounds a run declares (`stall_after_s`, `max_steps`, `max_cost_usd`) are recorded on its trace, and nothing stops the run or sends a notice when one is passed. When a task needs something the docs don't describe, say so and offer the nearest thing that exists; an invented route, flag, SDK method or event kind fails only once the user runs it.
 3. **Most actions happen in the console.** Creating organizations and projects, inviting members, changing roles, minting, rotating and revoking API keys, connecting Slack or a webhook, and reading or exporting the audit log have no API or CLI command. Walk the user through the page that documents the action, at the console path it gives (such as `/{organization}/{project}/api-keys`).
 4. **Secrets stay out of the conversation.** Never ask for an API key, a webhook signing secret or a `.env` file's contents, and never print, `cat` or log one: whatever reaches the transcript has leaked. Check presence instead (`[ -n "$TELMONI_API_KEY" ] && echo set`), and pass keys to commands through the environment, not as arguments.
-5. **Know the endpoint.** The SDKs send to `https://api.telmoni.com` unless `TELMONI_ENDPOINT` names a self-hosted deployment's origin; the CLI chooses its endpoint at `login` (`--endpoint`, `TELMONI_ENDPOINT`, its `endpoint` setting, then that default) and keeps it until it signs in again. When the code and environment don't settle which one the user means, ask: credentials from one deployment never work on another.
+5. **Know the endpoint.** The SDKs and the CLI default to `https://api.telmoni.com`. A self-hosted deployment is reached at its own machine host, named by `TELMONI_ENDPOINT` or, for an SDK client configured in code, its `endpoint` field, which the docs' examples set to `https://api.telmoni.com`: change it there too. The CLI keeps the endpoint it signed in to, while a key in `TELMONI_API_KEY` takes `TELMONI_ENDPOINT` on every command (`references/cli.md`). When the code and environment don't settle which deployment the user means, ask: credentials from one never work on another.
 6. **Without a shell** (a chat with no terminal, such as ChatGPT on the web), give the user each command to run and read what they paste back, and open documentation pages with whatever browsing or fetch tool you have.
 
 ## References
@@ -37,7 +37,7 @@ Read the one that matches the task before acting:
 
 ## Documentation
 
-Pages are at `https://telmoni.com/docs/<path>`, served by the console itself; fetch them with your web fetch tool. `https://telmoni.com/llms.txt` lists every page with its address and description, and `https://telmoni.com/llms-full.txt` is every page's text in one Markdown file. A self-hosted deployment serves the same three at its own origin, for the version it runs.
+Pages are at `https://telmoni.com/docs/<path>`, served by the console itself; fetch them with your web fetch tool. `https://telmoni.com/llms.txt` lists every page with its address and description, and `https://telmoni.com/llms-full.txt` is every page's text in one Markdown file. A self-hosted deployment serves the same three, for the version it runs, on its console's host (not a machine host of its own) and without the hosted service's `legal/` and `workspace/billing` pages.
 
 | Topic | Paths |
 |---|---|
@@ -51,6 +51,7 @@ Pages are at `https://telmoni.com/docs/<path>`, served by the console itself; fe
 | Self-hosting | `self-host/overview`, `self-host/docker-compose`, `self-host/kubernetes`, `self-host/agent`, `self-host/configuration`, `self-host/production` |
 | Account settings, accessibility, sessions, deletion | `account/settings`, `account/accessibility`, `account/privacy` |
 | Legal, security, subprocessors, the two FAQs for a review | `legal/privacy-policy`, `legal/terms-of-service`, `legal/subprocessors`, `legal/security`, `legal/privacy-faq`, `legal/security-faq` |
+| Contributing: how to, developing locally, the Code of Conduct, the AI policy | `contributing/introduction`, `contributing/developing`, `contributing/code-of-conduct`, `contributing/ai-policy` |
 
 To find which page mentions a term (an environment variable, an error type, a header), search the text of the whole site; each match prints with the page it came from:
 
