@@ -37,7 +37,7 @@ Read the one that matches the task before acting:
 
 ## Documentation
 
-Pages are at `https://telmoni.com/docs/<path>`, served by the console itself; fetch them with your web fetch tool. `https://telmoni.com/llms.txt` lists every page with its address and description, and `https://telmoni.com/llms-full.txt` is every page's text in one Markdown file. A self-hosted deployment serves the same three at its own origin, for the version it runs.
+Pages are at `https://telmoni.com/docs/<path>`, served by the console itself; fetch them with your web fetch tool. `https://telmoni.com/llms.txt` lists every page with its address and description, and `https://telmoni.com/llms-full.txt` is every page's text in one Markdown file. A self-hosted deployment serves the same three, for the version it runs, on its console's host (not a machine host of its own) and without the hosted service's `legal/` and `workspace/billing` pages.
 
 | Topic | Paths |
 |---|---|
@@ -51,6 +51,7 @@ Pages are at `https://telmoni.com/docs/<path>`, served by the console itself; fe
 | Self-hosting | `self-host/overview`, `self-host/docker-compose`, `self-host/kubernetes`, `self-host/agent`, `self-host/configuration`, `self-host/production` |
 | Account settings, accessibility, sessions, deletion | `account/settings`, `account/accessibility`, `account/privacy` |
 | Legal, security, subprocessors, the two FAQs for a review | `legal/privacy-policy`, `legal/terms-of-service`, `legal/subprocessors`, `legal/security`, `legal/privacy-faq`, `legal/security-faq` |
+| Contributing: how to, developing locally, the Code of Conduct, the AI policy | `contributing/introduction`, `contributing/developing`, `contributing/code-of-conduct`, `contributing/ai-policy` |
 
 To find which page mentions a term (an environment variable, an error type, a header), search the text of the whole site; each match prints with the page it came from:
 
