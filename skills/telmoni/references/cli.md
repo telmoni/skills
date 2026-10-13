@@ -20,7 +20,7 @@ Run `telmoni --version` first. If it's missing, build it from source with the CL
 
 - `telmoni login` prints a one-time code and an address, then blocks, polling for up to ten minutes until a person approves the code. Started in your foreground shell, nobody sees the code, and a tool timeout kills it with nothing saved. If the user wants you to drive it, start `telmoni login --no-browser` in the background with its output going to a file, relay the code and address it prints (they are meant to be shown), and wait for it to exit 0.
 - While `TELMONI_API_KEY` holds a key, even a stale one, every command that acts with a key uses it ahead of the saved login; `login`, `logout` and `org` say so on stderr. A blank value counts as unset.
-- A key is checked only for its shape (`telmoni_…`); `telmoni status` is what proves it works.
+- A key is checked only for its shape (`telmoni_…`); `telmoni status` proves it by asking `GET /v1/organization`, which takes the `read` scope: a key holding only `ingest` gets `403` there and still sends spans.
 - A key reaches only the API: `status` works, while `org list` and `org switch` need a device sign-in.
 - To save a key instead, pipe it to `telmoni login --with-key` from a file or a secret store, never as an argument; it refuses a terminal. To fetch one from a secret manager for each command, the user sets `telmoni config set api_key_helper '<command>'`, a command that prints the key. Signing in again replaces the saved credentials without ending the earlier session; `telmoni logout` first ends it.
 

@@ -15,7 +15,7 @@ Fetch the page before writing a client: https://telmoni.com/docs/api/reference (
 ## Calling it
 
 - Send `Authorization: Bearer $TELMONI_API_KEY`, with the key read from the environment or a secret store. Keys are server-side only: never in browser, mobile or other client-side code.
-- Check a key with `curl -sS -H "Authorization: Bearer $TELMONI_API_KEY" "${TELMONI_ENDPOINT:-https://api.telmoni.com}/v1/organization"`.
+- Check a key holding `read` with `curl -sS -H "Authorization: Bearer $TELMONI_API_KEY" "${TELMONI_ENDPOINT:-https://api.telmoni.com}/v1/organization"`. A key holding only `ingest`, as one in an agent's process should, gets `403` there while it works: test it against `/otlp/v1/traces`, where `401` is a dead key and `403` one without the scope.
 - Store `organization_id`, never `slug`: a slug moves when the organization's URL changes.
 
 ## Sending spans
