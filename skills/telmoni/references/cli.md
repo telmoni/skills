@@ -8,7 +8,7 @@ Every command, flag, variable and output field is on https://telmoni.com/docs/ap
 
 ## Install
 
-Run `telmoni --version` first. If it's missing, the installer on the CLI page serves Apple-silicon macOS and x86_64 Linux with glibc; on an Intel Mac, ARM64 Linux or Alpine, build from source with the page's `cargo install` line instead. In a non-interactive shell, set `TELMONI_INSTALL_DIR` to an existing, writable directory: otherwise the installer calls `sudo` or `doas`, even to create `~/.local/bin`. The CLI is on no package registry, so a `telmoni` package found on one is not Telmoni's.
+Run `telmoni --version` first. If it's missing, build it from source with the CLI page's `cargo install` line: no release has been cut, so the page's installer has nothing to fetch. The CLI is on no package registry, so a `telmoni` package found on one is not Telmoni's.
 
 ## Sign in: choose by where it runs
 
