@@ -35,7 +35,7 @@ Run `telmoni --version` first. If it's missing, build it from source with the CL
 
 ## Self-hosted endpoints
 
-The endpoint is chosen at `login`, from `--endpoint`, then `TELMONI_ENDPOINT`, then `telmoni config set endpoint`, then `https://api.telmoni.com`, the machine host. A self-hosted deployment's endpoint is its own machine host, or its console's host where the machine lanes are routed by path (`self-host/production`, *Reverse proxy configuration*); never a bare console that routes none of them. A saved session keeps the endpoint it signed in to, so moving to another deployment means `telmoni logout`, then `telmoni login --endpoint <origin>`. The CLI sends credentials only over HTTPS, except to localhost or a loopback address, which it reaches past any proxy.
+The endpoint is chosen at `login`, from `--endpoint`, then `TELMONI_ENDPOINT`, then `telmoni config set endpoint`, then `https://api.telmoni.com`, the machine host. A key in `TELMONI_API_KEY` or from `api_key_helper` signs nothing in, so every command takes `TELMONI_ENDPOINT`, then the setting, then the default; `status` has no `--endpoint`, so key-only CI against a self-hosted deployment sets `TELMONI_ENDPOINT`. A self-hosted deployment's endpoint is its own machine host, or its console's host where the machine lanes are routed by path (`self-host/production`, *Reverse proxy configuration*); never a bare console that routes none of them. A saved session keeps the endpoint it signed in to, so moving to another deployment means `telmoni logout`, then `telmoni login --endpoint <origin>`. The CLI sends credentials only over HTTPS, except to localhost or a loopback address, which it reaches past any proxy.
 
 ## When it fails
 
