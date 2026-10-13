@@ -40,7 +40,7 @@ The endpoint is chosen at `login`, from `--endpoint`, then `TELMONI_ENDPOINT`, t
 ## When it fails
 
 - `-v` after the subcommand (`telmoni status -v`) logs to stderr where the CLI read and wrote the saved login and each request's method, address and status, never a header, token or key; at `login` it also says where the endpoint came from.
-- `session ended; run telmoni login` means the session was ended (signed out elsewhere, ended from **Active sessions**, or 30 days unused) and the CLI already deleted its credentials: the user signs in again.
+- `session ended; run telmoni login` means the session was ended (from **Active sessions**, by a password reset or an email change, or after 30 days unused) and the CLI already deleted its credentials: the user signs in again.
 - The CLI needs network access to the endpoint and must write refreshed tokens to the Keychain on a Mac, else to its configuration directory; in a sandbox that blocks the write, a refresh it cannot save ends the session.
 - Behind a proxy that intercepts TLS, certificate errors follow: the CLI trusts only its bundled root certificates, not the system store or `SSL_CERT_FILE`.
-- Never open, print or copy the saved login: on a Mac the Keychain item `telmoni`, elsewhere the credentials file (`telmoni/credentials.json` in the user's configuration directory), which holds a refresh token or an API key unencrypted. `telmoni status` says what it holds.
+- Never open, print or copy the saved login: the Keychain item `telmoni` on a Mac, and the credentials file (`telmoni/credentials.json` in the user's configuration directory), which holds a refresh token or an API key unencrypted, on Linux and on a Mac whose Keychain refused it, as a locked one does over SSH or in a shell with no terminal, yours included. `telmoni status` says what it holds.
