@@ -6,7 +6,7 @@ The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skil
 - **Pre-launch:** nothing has shipped. Rename, restructure and rewrite skills to their ideal state; no deprecated names, redirects or migration notes.
 - **Quality gate:** never leave the tree broken.
 - **Ask first:** a new skill, a new top-level directory, any change to a skill's `allowed-tools`, any dependency (a GitHub Action, a tool CI or the `Makefile` installs), and any external-state change (publishing to a marketplace, a release, a call to a live Telmoni with a real key).
-- **Cover only what a user can reach**, as the docs do: signing in, the CLI and SDKs, API keys and the read-only `/v1` API, errors, notifications and connectors, organizations, projects, members, roles and the audit log, and self-hosting. Never anything not built yet: a capability gets a reference once a user can reach it, never ahead of it.
+- **Cover only what a user can reach**, as the docs do: signing in, the CLI and SDKs, the coding-agent plugins, API keys and the read-only `/v1` API, errors, notifications and connectors, organizations, projects, members, roles and the audit log, and self-hosting. Never anything not built yet: a capability gets a reference once a user can reach it, never ahead of it.
 - **Public sources only:** nothing from the private hosted-service repository, its roadmap or its plans goes into a skill, beyond what telmoni.com/docs already states.
 
 ## Where Things Live
@@ -53,6 +53,7 @@ These files restate code and pages; when those change, the skill follows. Every 
 - `references/api.md`: `crates/auth/src/handler/v1.rs`, `crates/auth/src/handler/tokens.rs`, the machine host's door (`crates/telmoni/src/door.rs`), ingest (`crates/telemetry/src/handler/ingest.rs` and `crates/telemetry/src/contract.rs`), the error types in `crates/shared/src/error.rs` and `sdk/` in `telmoni/telmoni`, and `api/reference.mdx`, `api/ingest.mdx`, `api/field-inventory.mdx`, `api/api-keys.mdx`, `api/sdks.mdx` and `errors.mdx`.
 - `references/webhooks.md`: `crates/notifications/src/connector/webhook.rs`, `crates/notifications/src/delivery.rs` and `web/lib/webhook-signature.ts` in `telmoni/telmoni`, and `integrations/webhooks.mdx`.
 - `references/self-host.md`: `deploy/`, `crates/telemetry/clickhouse/`, `crates/migrator/sql/role_hardening.sql` and the binary's subcommands (`crates/telmoni/src/cli.rs`) in `telmoni/telmoni`, and the `self-host/` pages.
+- `references/coding-agents.md`: `README.md`, `ARCHITECTURE.md` and `src/` of the four `telmoni/<agent>-observability-plugin` repositories, and `api/coding-agents.mdx`.
 - `evals/`: the same sources as the reference each case exercises; a grader that pins a fact (the webhook test vector, an error type) changes with it.
 
 ## Versioning
