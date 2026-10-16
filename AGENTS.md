@@ -69,6 +69,7 @@ A skill is tested on the agents it ships to: a sentence that reads clearly in a 
 - **This repo only:** change nothing in another repository (`telmoni/telmoni`, `telmoni/telmoni-cli`, any other) unless the user says so for this task; that binds subagents too. Reading is fine.
 - Edit `AGENTS.md` (`.github/copilot-instructions.md` points here) only when the user asks outright; otherwise propose a diff. There is no `CLAUDE.md`: Claude Code reads this file, and a `CLAUDE.md` at a plugin's root fails `claude plugin validate --strict`.
 - No AI signatures anywhere, skills included.
+- Comments in a grader or a script are for a person reading it, and short: they say *why*, never *what*, in a line or two at most.
 - No scripted bulk edits: edit each file deliberately and review the diff. One-off scripts, eval workspaces and logs go in `/tmp/telmoni/`.
 - Never read, print or copy a `.env` file or the CLI's credentials file, and never put a real key in a skill, an eval or a commit.
 - Keep the repo slim: fix a real problem where it lives. No guard script, lint gate or CI job for a problem that is not happening.
