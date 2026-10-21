@@ -8,7 +8,7 @@ Every command, flag, variable and output field is on https://telmoni.com/docs/ap
 
 ## Install
 
-Run `telmoni --version` first. If it's missing, build it from source with the CLI page's `cargo install` line: no release has been cut, so the page's installer has nothing to fetch. The CLI is on no package registry, so a `telmoni` package found on one is not Telmoni's.
+Run `telmoni --version` first. If it's missing, install it with the CLI page's `cargo install --locked telmoni-cli`: no release has been cut, so the page's installer has nothing to fetch. On crates.io the CLI is `telmoni-cli`; a crate named `telmoni` is not Telmoni's.
 
 ## Sign in: choose by where it runs
 
