@@ -44,6 +44,7 @@ Pages are at `https://telmoni.com/docs/<path>`, served by the console itself; fe
 |---|---|
 | Introduction, signing in | the book's root (`/docs`), `getting-started/sign-in` |
 | Organizations, projects, members, roles | `workspace/organizations-and-projects`, `workspace/members`, `workspace/roles` |
+| Monitors: an agent's schedule and bounds, its pings and ping key, its page | `workspace/monitors` |
 | Traces, sessions, users: a project's runs in the console | `workspace/traces`, `workspace/sessions`, `workspace/users` |
 | Audit log, billing on the hosted service | `workspace/audit-log`, `workspace/billing` |
 | How long each kind of data is kept, and what a deletion removes | `workspace/data-retention`, `workspace/data-deletion` |
