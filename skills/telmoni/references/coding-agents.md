@@ -37,5 +37,5 @@ Fetch https://telmoni.com/docs/api/coding-agents before proposing anything: it h
 
 ## When nothing shows up
 
-- Each plugin writes what went wrong to a log of its own, never anything said in the session: `~/.claude/telmoni/hook.log`, `~/.codex/telmoni/hook.log`, `~/.cursor/telmoni/hook.log` or `~/.local/state/telmoni/opencode/plugin.log` (`CLAUDE_CONFIG_DIR`, `CODEX_HOME` and `XDG_STATE_HOME` move them). It says when no key is set, and gives Telmoni's answer to a turn it refused: `401` for a dead key, `403` `/errors/authz/forbidden` for one without the **ingest** scope. Read it before guessing.
+- Each plugin writes what went wrong to a log of its own, never anything said in the session: `~/.claude/telmoni/hook.log`, `~/.codex/telmoni/hook.log`, `~/.cursor/telmoni/hook.log` or `~/.local/state/telmoni/opencode/plugin.log` (`CLAUDE_CONFIG_DIR`, `CODEX_HOME` and `XDG_STATE_HOME` move them). It says when no key is set, and gives Telmoni's answer to a turn it refused: `401` for a dead key, `403` `/errors/authz/forbidden` for one without the **ingest** scope. Claude Code's, Cursor's and OpenCode's also give, once, the SDK's reason for refusing the endpoint (`endpoint refused by the SDK`). Read it before guessing.
 - A turn that could not reach Telmoni is sent again as a later turn ends, and a copy is stored once.
