@@ -8,7 +8,7 @@ Every command, flag, variable and output field is on https://telmoni.com/docs/ap
 
 ## Install
 
-Run `telmoni --version` first. If it's missing, install it with the CLI page's `cargo install --locked telmoni-cli`: no release has been cut, so the page's installer has nothing to fetch. On crates.io the CLI is `telmoni-cli`; `telmoni` there is the Rust SDK, which installs no command.
+Run `telmoni --version` first. If it's missing, install it with the CLI page's `cargo install --locked telmoni-cli`: the page's installer serves x86_64 Linux alone, and has nothing to fetch until the first release is cut, so a Mac and every other platform build from source. On crates.io the CLI is `telmoni-cli`; `telmoni` there is the Rust SDK, which installs no command.
 
 ## Sign in: choose by where it runs
 
