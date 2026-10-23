@@ -23,7 +23,7 @@ Fetch https://telmoni.com/docs/api/coding-agents before proposing anything: it h
 
 - Each is the npm package `@telmoni/<agent>-observability-plugin`, installed with the page's lines, or a build from a checkout of its repository; a plugin package outside the `@telmoni` scope is not Telmoni's.
 - Give the user the lines, and run none of them until they say go: from then on the plugin runs at every turn and sends Telmoni each one's metadata. That covers a clone or a build, `npm install -g`, a `claude plugin`, `codex plugin` or `telmoni-cursor-observability setup` command, and an edit to `opencode.json`.
-- Claude Code's, Codex's and Cursor's plugins need Node.js 22 or later with npm on the `PATH`, and Codex 0.143 or later; OpenCode's runs inside OpenCode, 1.18.29 or later, or 2.
+- Claude Code's, Codex's and Cursor's plugins need Node.js 22.23.4, 24.22.1, 26.12.1 or later (October 2026's security releases) with npm on the `PATH`, and Codex 0.143 or later; OpenCode's runs inside OpenCode, 1.18.29 or later, or 2.
 - Nothing is recorded before the agent loads the plugin: Claude Code and Codex load it as a session starts, and OpenCode as it starts, so the user starts a new session, or restarts OpenCode, once it is in; Cursor reloads its hooks file as it changes, so its next prompt is recorded.
 - Codex runs a plugin's hooks only once the user trusts them, when Codex asks or in `/hooks`; `codex exec` asks nothing, so they trust them once in Codex itself.
 - A turn is sent once it has ended, so the one in progress shows only after it.
