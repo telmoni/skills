@@ -1,6 +1,6 @@
 {
   "name": "telmoni",
-  "description": "Skills for working with Telmoni: the SDKs that record the runs of the agents you build, the telmoni CLI, API keys and the read-only /v1 API, signed webhooks, and self-hosting with Docker Compose or Kubernetes.",
+  "description": "Skills for working with Telmoni: the SDKs that record the runs of the agents you build, the plugins that record your coding agent's own sessions, the telmoni CLI, API keys and the read-only /v1 API, signed webhooks, and self-hosting with Docker Compose or Kubernetes.",
   "author": {
     "name": "Telmoni",
     "email": "hello@telmoni.com",
@@ -14,7 +14,7 @@
   "interface": {
     "displayName": "Telmoni",
     "shortDescription": "Telmoni CLI, API and webhooks",
-    "longDescription": "Works with Telmoni, the platform that records AI agents' runs as metadata, for organizations and projects, members and roles, API keys, notifications and a hash-chained audit log. Instruments the agents you build with the SDKs that record their runs, drives the telmoni CLI, calls the read-only /v1 API with an API key, builds and tests receivers for Telmoni's signed webhooks, self-hosts Telmoni with Docker Compose or Kubernetes, and finds answers at telmoni.com/docs. The skill sends no data anywhere: it only reads Telmoni's public documentation.",
+    "longDescription": "Works with Telmoni, the platform that records AI agents' runs as metadata, for organizations and projects, members and roles, API keys, notifications and a hash-chained audit log. Instruments the agents you build with the SDKs that record their runs, sets up the plugin that records a coding agent's own sessions, drives the telmoni CLI, calls the read-only /v1 API with an API key, builds and tests receivers for Telmoni's signed webhooks, self-hosts Telmoni with Docker Compose or Kubernetes, and finds answers at telmoni.com/docs. The skill itself sends nothing: it reads Telmoni's public documentation, and the telmoni commands it runs reach only the deployment the user names.",
     "developerName": "Telmoni",
     "category": "Developer Tools",
     "capabilities": [

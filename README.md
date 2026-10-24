@@ -11,7 +11,7 @@ Telmoni has not launched yet, and the skills cover what a user can reach today.
 
 | Skill | What it does |
 |---|---|
-| [`telmoni`](skills/telmoni/SKILL.md) | Drives the CLI, calls the `/v1` API, builds and tests webhook receivers, self-hosts with Docker Compose or Kubernetes, and finds answers in the documentation. |
+| [`telmoni`](skills/telmoni/SKILL.md) | Sets up the SDKs that record your agents' runs and the plugin that records your coding agent's own sessions, drives the CLI, calls the `/v1` API, builds and tests webhook receivers, self-hosts with Docker Compose or Kubernetes, and finds answers in the documentation. |
 
 ## Install
 
@@ -78,7 +78,7 @@ ln -s "$PWD/telmoni-skills/skills/telmoni" ~/.claude/skills/telmoni
 ## Before you start
 
 - **Keys stay out of the chat.** Put an API key in `TELMONI_API_KEY`, or a webhook signing secret in your secret store, before you start; the skill has the agent check that a key is set, never ask for or print one.
-- **Self-hosted?** Set `TELMONI_ENDPOINT` to your deployment's machine host; without it, the CLI and SDKs talk to `https://api.telmoni.com`.
+- **Self-hosted?** Set `TELMONI_ENDPOINT` to your deployment's machine host; without it the SDKs, the plugins and the CLI use `https://api.telmoni.com`, but for a setting of their own and a CLI signed in with `--endpoint`, which keeps that one.
 - **The CLI is optional:** the skill installs it when a task needs it, with your go-ahead.
 
 ## Layout
