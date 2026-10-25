@@ -1,7 +1,7 @@
 ---
 name: telmoni
 description: >-
-  Works with Telmoni, the platform that records AI agents' runs as metadata, for organizations and projects, members and roles, API keys, notifications and a hash-chained audit log: records an agent's runs with its SDKs (Python, TypeScript, Go, Rust) and a coding agent's own sessions with its plugin (Claude Code, Codex, OpenCode, Cursor), drives the `telmoni` CLI, calls the read-only `/v1` API with a `telmoni_` API key, builds and tests receivers for its signed webhooks, self-hosts it with Docker Compose or Kubernetes, and finds answers in its documentation. Use for any task that involves Telmoni or telmoni.com/docs, including when only the code or configuration names it (`TELMONI_API_KEY`, `TELMONI_ENDPOINT`, `Telmoni-Signature`).
+  Works with Telmoni, the platform that records AI agents' runs as metadata, for organizations and projects, members and roles, API keys, notifications and a hash-chained audit log: records an agent's runs with its SDKs (Python, TypeScript, Go, Rust) and a coding agent's own sessions with its plugin (Claude Code, Codex, OpenCode, Cursor), drives the `telmoni` CLI, calls the read-only `/v1` API with a `tm_` API key, builds and tests receivers for its signed webhooks, self-hosts it with Docker Compose or Kubernetes, and finds answers in its documentation. Use for any task that involves Telmoni or telmoni.com/docs, including when only the code or configuration names it (`TELMONI_API_KEY`, `TELMONI_ENDPOINT`, `Telmoni-Signature`).
 license: Apache-2.0
 allowed-tools:
   - WebFetch(domain:telmoni.com)
