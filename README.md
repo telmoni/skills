@@ -83,12 +83,12 @@ ln -s "$PWD/telmoni-skills/skills/telmoni" ~/.claude/skills/telmoni
 
 ```text
 skills/          one directory per skill: SKILL.md and its references/
-evals/           the cases the skills are tested against, with and without them (claude plugin eval)
+evals/           the cases the skills are tested against, with and without them (claude plugin eval; codex.py runs them in Codex)
 .claude-plugin/  the Claude Code plugin, and the marketplace that installs it
 .codex-plugin/   the listing card for Codex releases before 0.146, which don't read the root plugin.json
 .cursor-plugin/  the Cursor plugin
 plugin.json      the Agent Plugins manifest, for Codex, Antigravity, Cursor, VS Code and Copilot, and its listing for OpenAI's plugin directory
-Makefile         make check, the gate CI runs; make eval, the eval suite
+Makefile         make check, the gate CI runs; make eval, the eval suite; make eval-codex, the same in Codex
 ```
 
 ## Contributing

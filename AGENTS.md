@@ -15,11 +15,12 @@ The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skil
 | `skills/<name>/SKILL.md` | A skill: its frontmatter (`name`, `description`, `license`, `allowed-tools`; nothing outside the Agent Skills spec) and the body every invocation loads. |
 | `skills/<name>/references/` | One file per use case, opened only when `SKILL.md` routes there. |
 | `evals/<case>/` | One case for `claude plugin eval`: `prompt.md` (the request as a person would type it, and its run limits), `graders/` (the checks), and for a case that needs a starting project, `case.yaml` and `scaffold.sh`. |
+| `evals/codex.py` | The same cases run in Codex, headless (`codex exec`), with the skill linked into each run's project and without, graded by the same graders: `make eval-codex`. |
 | `.claude-plugin/` | `plugin.json`, the Claude Code plugin, and `marketplace.json`, which makes this repository its own marketplace; Codex and Copilot read that marketplace too. |
 | `.codex-plugin/` | `plugin.json`, the Codex manifest for releases before 0.146, which read no root `plugin.json`; its `interface` is a copy of `plugin.json`'s `extensions["com.openai"].interface`, which later releases read instead. |
 | `.cursor-plugin/` | `plugin.json`, the Cursor plugin manifest, checked against Cursor's schema. |
 | `plugin.json` | The [Agent Plugins](https://agent-plugins.org) manifest, which Codex prefers and Antigravity, Cursor, VS Code and Copilot read; its `extensions["com.openai"]` block is the listing OpenAI's plugin directory shows ChatGPT users. |
-| `Makefile` | `check`, the gate, and `eval`, the eval suite. |
+| `Makefile` | `check`, the gate; `eval`, the eval suite in Claude Code; `eval-codex`, the same in Codex. |
 | `.github/workflows/ci.yml` | CI: `make check` and actionlint. |
 | `scratch/` | The maintainer's notes, gitignored. Never write to it. |
 | [`telmoni/telmoni`](https://github.com/telmoni/telmoni) | Sibling repo, checked out as `../telmoni`: the platform and the four SDKs under `sdk/`, the authority on the API, the SDKs, webhooks, errors and self-hosting, and the console that serves the book. |
@@ -28,7 +29,7 @@ The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skil
 
 ## Commands
 - **After every change** (no permission needed; report failures verbatim): `make check`, which validates each skill against the Agent Skills spec (`skills-ref`), `plugin.json` against the Agent Plugins schema, `.cursor-plugin/plugin.json` against Cursor's, and the Claude Code plugin and marketplace (`claude plugin validate .`). It needs `uv` and Claude Code. Its one expected warning is the missing `version` (Versioning).
-- **Only when asked**, since it spends model usage: `make eval`, or one case with `make eval CASE=<case> RUNS=1`. On Linux the runs need `bubblewrap` and `socat` for Claude Code's sandbox. Unasked, say "untested" and name the command.
+- **Only when asked**, since it spends model usage: `make eval`, or one case with `make eval CASE=<case> RUNS=1`. On Linux the runs need `bubblewrap` and `socat` for Claude Code's sandbox. `make eval-codex` runs the cases in Codex the same way; it needs Codex (`npm install -g @openai/codex`) signed in. Unasked, say "untested" and name the command.
 - **Locally:** `claude --plugin-dir .` starts a Claude Code session with this checkout's plugin loaded. `agy plugin install .` installs it into Antigravity; `agy plugin validate` reads only `plugin.json`, so it is no check of a skill and is not in the gate.
 
 ## Writing Rules
@@ -62,7 +63,7 @@ No manifest carries a `version` before launch. Claude Code then versions the plu
 A skill is tested on the agents it ships to: a sentence that reads clearly in a diff can still steer an agent wrong mid-task.
 - While iterating, `make eval CASE=<case> RUNS=1`; before a change counts as done, the cases it touches at the default three runs. Each case runs with and without the plugin, and `Δ` is what the skill adds. Read the transcripts in the report as well as the scores: which reference the agent opened, what it fetched, what it invented.
 - A new reference or changed routing gets a case whose prompt should route there, phrased as a person would type it, and the other cases must still route where they did. Never tune a `description` to the cases' wording: a skill that passes only its own prompts has learned the prompts.
-- Codex reads the same files and behaves differently: run a changed case's prompt in Codex as well, with `skills/<name>` linked into `~/.agents/skills/`, and compare.
+- Codex reads the same files and behaves differently: run the changed cases in Codex too, `make eval-codex CASE=<case> RUNS=1`, and compare its transcripts under `evals/results/` with Claude Code's. A `tool_used` grader there reads Codex's items (`Bash` its commands, `Write` and `Edit` its file changes), `Skill` fires where the skill's `SKILL.md` was read, and an `llm` grader is judged by Codex.
 - A grader that reads a file names it by path, so the prompt names the files it expects the agent to write.
 
 ## Agent Hygiene
