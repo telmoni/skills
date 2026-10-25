@@ -4,7 +4,7 @@ The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skil
 
 ## Ground Rules
 - **Pre-launch:** nothing has shipped. Rename, restructure and rewrite skills to their ideal state; no deprecated names, redirects or migration notes.
-- **Quality gate:** never leave the tree broken.
+- **Quality gate:** never leave the tree broken: every install clones `main` as it stands.
 - **Ask first:** a new skill, a new top-level directory, any change to a skill's `allowed-tools`, any dependency (a GitHub Action, a tool CI or the `Makefile` installs), and any external-state change (publishing to a marketplace, a release, a call to a live Telmoni with a real key).
 - **Cover only what a user can reach**, as the docs do: signing in, the CLI and SDKs, the coding-agent plugins, API keys and the read-only `/v1` API, errors, notifications and connectors, organizations, projects, members, roles and the audit log, and self-hosting. Never anything not built yet: a capability gets a reference once a user can reach it, never ahead of it.
 - **Public sources only:** nothing from the private hosted-service repository, its roadmap or its plans goes into a skill, beyond what telmoni.com/docs already states.
@@ -14,14 +14,13 @@ The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skil
 |---|---|
 | `skills/<name>/SKILL.md` | A skill: its frontmatter (`name`, `description`, `license`, `allowed-tools`; nothing outside the Agent Skills spec) and the body every invocation loads. |
 | `skills/<name>/references/` | One file per use case, opened only when `SKILL.md` routes there. |
-| `evals/<case>/` | One case for `claude plugin eval`: `prompt.md` (the request as a person would type it, and its run limits), `graders/` (the checks), and for a case that needs a starting project, `case.yaml` and `scaffold.sh`. Never on the `release` branch, so no install downloads them. |
+| `evals/<case>/` | One case for `claude plugin eval`: `prompt.md` (the request as a person would type it, and its run limits), `graders/` (the checks), and for a case that needs a starting project, `case.yaml` and `scaffold.sh`. |
 | `.claude-plugin/` | `plugin.json`, the Claude Code plugin, and `marketplace.json`, which makes this repository its own marketplace; Codex and Copilot read that marketplace too. |
 | `.codex-plugin/` | `plugin.json`, the Codex manifest for releases before 0.146, which read no root `plugin.json`; its `interface` is a copy of `plugin.json`'s `extensions["com.openai"].interface`, which later releases read instead. |
 | `.cursor-plugin/` | `plugin.json`, the Cursor plugin manifest, checked against Cursor's schema. |
 | `plugin.json` | The [Agent Plugins](https://agent-plugins.org) manifest, which Codex prefers and Antigravity, Cursor, VS Code and Copilot read; its `extensions["com.openai"]` block is the listing OpenAI's plugin directory shows ChatGPT users. |
 | `Makefile` | `check`, the gate, and `eval`, the eval suite. |
-| `.github/workflows/ci.yml` | CI: `make check` and actionlint, and on `main` the `publish` job. |
-| `release` branch | What every install fetches: the manifests, `skills/`, `LICENSE` and `NOTICE`, which the `publish` job copies from `main` as a commit on the last, so a clone's `git pull` fast-forwards. Never edit or push it by hand; a new file an agent loads joins the job's `cp` line in the same change. |
+| `.github/workflows/ci.yml` | CI: `make check` and actionlint. |
 | `scratch/` | The maintainer's notes, gitignored. Never write to it. |
 | [`telmoni/telmoni`](https://github.com/telmoni/telmoni) | Sibling repo, checked out as `../telmoni`: the platform and the four SDKs under `sdk/`, the authority on the API, the SDKs, webhooks, errors and self-hosting, and the console that serves the book. |
 | [`telmoni/docs`](https://github.com/telmoni/docs) | Sibling repo, checked out as `../docs`: the book, `content/`, which every console serves at `/docs`, and the hosted service's own pages (billing, legal), `hosted/`, which telmoni.com/docs serves beside it: the pages every skill links to. |

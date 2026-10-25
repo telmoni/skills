@@ -15,21 +15,19 @@ Telmoni has not launched yet, and the skills cover what a user can reach today.
 
 ## Install
 
-Every install below fetches the `release` branch, which holds only what an agent loads: the manifests, `skills/`, `LICENSE` and `NOTICE`. The evals and tooling on `main` never reach your machine.
-
 ### Claude Code
 
 ```console
-/plugin marketplace add telmoni/skills@release
+/plugin marketplace add telmoni/skills
 /plugin install telmoni@telmoni
 ```
 
-From a shell, the same is `claude plugin marketplace add telmoni/skills@release` and `claude plugin install telmoni@telmoni`. The skill loads by itself when a task involves Telmoni, and `/telmoni:telmoni` calls it by name. Claude Code doesn't update a third-party marketplace on its own: `claude plugin update telmoni@telmoni` fetches the latest, or turn on auto-update for it under `/plugin` → **Marketplaces**.
+From a shell, the same is `claude plugin marketplace add telmoni/skills` and `claude plugin install telmoni@telmoni`. The skill loads by itself when a task involves Telmoni, and `/telmoni:telmoni` calls it by name. Claude Code doesn't update a third-party marketplace on its own: `claude plugin update telmoni@telmoni` fetches the latest, or turn on auto-update for it under `/plugin` → **Marketplaces**.
 
 ### Codex
 
 ```console
-codex plugin marketplace add telmoni/skills@release
+codex plugin marketplace add telmoni/skills
 codex plugin add telmoni@telmoni
 ```
 
@@ -38,7 +36,7 @@ codex plugin add telmoni@telmoni
 The `agy` CLI installs a clone of this repository as a plugin, for the IDE and the CLI alike:
 
 ```console
-git clone --depth 1 --branch release https://github.com/telmoni/skills.git telmoni-skills
+git clone --depth 1 https://github.com/telmoni/skills.git telmoni-skills
 agy plugin install ./telmoni-skills
 ```
 
@@ -49,7 +47,7 @@ agy plugin install ./telmoni-skills
 This plugin is not in the Cursor Marketplace yet. Until it is, clone this repository into Cursor's local plugins folder, then restart Cursor or run **Developer: Reload Window**:
 
 ```console
-git clone --depth 1 --branch release https://github.com/telmoni/skills.git ~/.cursor/plugins/local/telmoni
+git clone --depth 1 https://github.com/telmoni/skills.git ~/.cursor/plugins/local/telmoni
 ```
 
 `git pull` in that folder, then a reload, brings a newer version. Cursor skips a symlink to a clone elsewhere, so clone into the folder itself. On Teams and Enterprise plans, admins allow local plugins with **Allow Local Plugin Imports**, which is off by default on Enterprise.
@@ -59,19 +57,19 @@ git clone --depth 1 --branch release https://github.com/telmoni/skills.git ~/.cu
 The [skills CLI](https://github.com/vercel-labs/skills) installs the skill into the agents it finds in your project; `-a <agent>` picks one (`opencode`, `antigravity`, `cursor`, `github-copilot`, `gemini-cli`, …), and `-g` installs it for your user instead:
 
 ```console
-npx skills add https://github.com/telmoni/skills/tree/release
+npx skills add telmoni/skills
 ```
 
 ### ChatGPT
 
-The ChatGPT desktop app lists the skills of the projects you open in its **Skills** sidebar, so a project that holds the skill in `.agents/skills/` (`npx skills add https://github.com/telmoni/skills/tree/release -a codex` puts it there) has it in ChatGPT too, and a skill linked into `~/.agents/skills/` follows you to every project. ChatGPT on the web and on mobile takes skills only from OpenAI's plugin directory; this plugin is not listed there yet.
+The ChatGPT desktop app lists the skills of the projects you open in its **Skills** sidebar, so a project that holds the skill in `.agents/skills/` (`npx skills add telmoni/skills -a codex` puts it there) has it in ChatGPT too, and a skill linked into `~/.agents/skills/` follows you to every project. ChatGPT on the web and on mobile takes skills only from OpenAI's plugin directory; this plugin is not listed there yet.
 
 ### By hand
 
 Clone this repository and link the skill into your agent's skills directory: `~/.claude/skills/` for Claude Code, `~/.agents/skills/` for Codex, Cursor, Copilot, Gemini CLI and the ChatGPT desktop app, `~/.config/opencode/skills/` for OpenCode, `~/.gemini/config/skills/` for Antigravity.
 
 ```console
-git clone --depth 1 --branch release https://github.com/telmoni/skills.git telmoni-skills
+git clone --depth 1 https://github.com/telmoni/skills.git telmoni-skills
 ln -s "$PWD/telmoni-skills/skills/telmoni" ~/.claude/skills/telmoni
 ```
 
@@ -92,8 +90,6 @@ evals/           the cases the skills are tested against, with and without them 
 plugin.json      the Agent Plugins manifest, for Codex, Antigravity, Cursor, VS Code and Copilot, and its listing for OpenAI's plugin directory
 Makefile         make check, the gate CI runs; make eval, the eval suite
 ```
-
-CI copies the manifests, `skills/`, `LICENSE` and `NOTICE` to the `release` branch on each push to `main`, one commit on top of the last, so a clone's `git pull` fast-forwards.
 
 ## Contributing
 
