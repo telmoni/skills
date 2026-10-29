@@ -6,7 +6,7 @@ The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skil
 - **Pre-launch:** nothing has shipped. Rename, restructure and rewrite skills to their ideal state; no deprecated names, redirects or migration notes.
 - **Quality gate:** never leave the tree broken: every install clones `main` as it stands.
 - **Ask first:** a new skill, a new top-level directory, any change to a skill's `allowed-tools`, any dependency (a GitHub Action, a tool CI or the `Makefile` installs), and any external-state change (publishing to a marketplace, a release, a call to a live Telmoni with a real key).
-- **Cover only what a user can reach**, as the docs do: signing in, the CLI and SDKs, the coding-agent plugins, API keys and the read-only `/v1` API, errors, notifications and connectors, organizations, projects, members, roles and the audit log, and self-hosting. Never anything not built yet: a capability gets a reference once a user can reach it, never ahead of it.
+- **Cover only what a user can reach**, as the docs do: signing in, the CLI and SDKs, the coding-agent plugins, API keys and the read-only `/v1` API, errors, a project's traces, sessions and users, alerts, notifications and connectors, organizations, projects, members, roles, the audit log, data retention and deletion, and self-hosting. Never anything not built yet: a capability gets a reference once a user can reach it, never ahead of it.
 - **Public sources only:** a skill states nothing beyond what telmoni.com/docs and the public repositories already state.
 
 ## Where Things Live
