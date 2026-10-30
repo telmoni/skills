@@ -8,7 +8,7 @@ Every command, flag, variable and output field is on https://telmoni.com/docs/ap
 
 ## Install
 
-Run `telmoni --version` first. If it's missing, install it as the CLI page says: its installer on x86_64 Linux with glibc, the one platform it serves (not Alpine or another musl system), and `cargo install --locked telmoni-cli` everywhere else, a Mac included. On crates.io the CLI is `telmoni-cli`; `telmoni` there is the Rust SDK, which installs no command.
+Run `telmoni --version` first. If it's missing, install it as the CLI page says: its installer on x86_64 Linux, the one platform it serves (any distribution, Alpine included: the binary is static), and `cargo install --locked telmoni-cli` everywhere else, a Mac included. On crates.io the CLI is `telmoni-cli`; `telmoni` there is the Rust SDK, which installs no command.
 
 ## Sign in: choose by where it runs
 
@@ -23,13 +23,13 @@ Run `telmoni --version` first. If it's missing, install it as the CLI page says:
 - At a terminal, stdin and stderr both one, the CLI asks the user once per key before using it, and passes over a key they declined; with `--json` it never asks, so use `telmoni status --json` where your shell may be a terminal. Your shell is usually none, so you are never asked and the key is used whatever they answered: your `telmoni status` can name the key's organization while theirs names their own login. They change an answer with `telmoni config set use_api_key_env true|false`, run with the variable set.
 - A key is checked only for its shape (`tm_…`); `telmoni status` proves it by asking `GET /v1/organization`, which takes the `read` scope: a key holding only `ingest` gets `403` there and still sends spans.
 - A key reaches only the API: `status` works, while `org list` and `org switch` need a device sign-in.
-- To save a key instead, pipe it to `telmoni login --with-key` from a file or a secret store, never as an argument; it refuses a terminal. To fetch one from a secret manager for each command, the user sets `telmoni config set api_key_helper '<command>'`, a command that prints the key. Signing in again replaces the saved credentials without ending the earlier session; `telmoni logout` first ends it.
+- To save a key instead, pipe it to `telmoni login --with-key` from a file or a secret store, never as an argument; it refuses a terminal. To fetch one from a secret manager for each command, the user sets `telmoni config set api_key_helper '<command>'`, a command that prints the key; a value carrying the key itself is refused. Signing in again replaces the saved credentials without ending the earlier session; `telmoni logout` first ends it.
 - `TELMONI_CONFIG_DIR=<absolute path>` moves both the saved login and `config.json` into that directory, and each directory holds a login of its own: two values are two logins (on a Mac, two Keychain items), each read by the commands run with its value. A relative path is refused; a blank value counts as unset.
 
 ## Script it
 
 - `telmoni status --json` is the machine interface. Branch on `authType` before reading anything else: `device` carries `person` and `activeOrganization` (`organizationId`, `slug`, `label`, `role`, or `null`), `api_key` carries `organization` and `keySource` (`environment`, `helper` or `saved`), and `unusedLogin` (`device` or `api_key`) when the key passed a saved login over.
-- Judge a command by its exit code: 0 for success, 1 for any failure (the reason is on stderr), 2 for a usage error. Signed out, plain `status` still prints `Endpoint: …` to stdout before failing, while `--json` prints nothing.
+- Judge a command by its exit code: 0 for success, 1 for any failure (the reason is on stderr), 2 for a usage error, 4 when there is no login to act with (signed out, the session ended, or `org` given an API key): sign in again rather than retry. Signed out, plain `status` still prints `Endpoint: …` to stdout before failing, while `--json` prints nothing.
 - `org list` has no JSON form. Each line is `<* or space> <id>  <slug>  <label>  <role>`, the fields two spaces apart; a label can contain spaces, so read the role from the right. It shows the list saved by the last `login`, `status` or `org switch`.
 - Name organizations by ID (`org_…`). A slug moves when its organization's URL changes, and the CLI matches slugs exactly against its saved list, without asking the server.
 - `TELMONI_ORG=<id> telmoni status` acts in another organization for one command without switching; device sign-ins only.
