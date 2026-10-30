@@ -5,6 +5,7 @@ The agent skills for Telmoni ([`telmoni/skills`](https://github.com/telmoni/skil
 ## Ground Rules
 - **Pre-launch:** nothing has shipped. Rename, restructure and rewrite skills to their ideal state; no deprecated names, redirects or migration notes.
 - **Quality gate:** never leave the tree broken: every install clones `main` as it stands.
+- **Build only what is asked:** the smallest change that does the task, in the files that already hold it. No skill, reference, section, eval or script for a need that is not here yet, and no rewrite beyond the task (a split, a rename, a pass for style): propose it with what it costs, and wait. A new repository, plugin or workflow is the owner's to make.
 - **Ask first:** a new skill, a new top-level directory, any change to a skill's `allowed-tools`, any dependency (a GitHub Action, a tool CI or the `Makefile` installs), and any external-state change (publishing to a marketplace, a release, a call to a live Telmoni with a real key).
 - **Cover only what a user can reach**, as the docs do: signing in, the CLI and SDKs, the coding-agent plugins, API keys and the read-only `/v1` API, errors, a project's traces, sessions and users, alerts, notifications and connectors, organizations, projects, members, roles, the audit log, data retention and deletion, and self-hosting. Never anything not built yet: a capability gets a reference once a user can reach it, never ahead of it.
 - **Public sources only:** a skill states nothing beyond what telmoni.com/docs and the public repositories already state.
